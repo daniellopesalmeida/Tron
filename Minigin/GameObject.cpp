@@ -13,6 +13,7 @@ dae::GameObject::GameObject()
 
 dae::GameObject::~GameObject()
 {
+	
 
 }
 
@@ -26,10 +27,6 @@ void dae::GameObject::Render() const
 	for (auto& comp : m_Components) comp->Render();
 }
 
-void dae::GameObject::SetTexture(const std::string& filename)
-{
-	m_Texture = ResourceManager::GetInstance().LoadTexture(filename);
-}
 
 void dae::GameObject::SetPosition(float x, float y)
 {

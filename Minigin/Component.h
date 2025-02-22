@@ -18,9 +18,13 @@ namespace dae
         virtual void Update(float deltaTime);
         virtual void Render() const;
 
+        
+    protected:
+
         GameObject* GetOwner() const { return m_pOwner; }
 
-    protected:
+   private:
         GameObject* m_pOwner{ nullptr };
+       
     };
 }

@@ -30,7 +30,15 @@ void Scene::Update(float deltaTime)
 {
 	for(auto& object : m_objects)
 	{
-		object->Update(deltaTime);
+		if (object == nullptr) continue;
+		if (!object->IsMarkedForDeletion())
+		{
+			object->Update(deltaTime);
+		}
+		else
+		{
+			Remove(object);
+		}
 	}
 }
 

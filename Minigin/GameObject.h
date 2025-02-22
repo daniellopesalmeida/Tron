@@ -8,18 +8,19 @@
 
 namespace dae
 {
-	class Texture2D;
-
+	
 	class GameObject final
 	{
 	public:
 		void Update(float deltaTime);
 		void Render() const;
 
-		void SetTexture(const std::string& filename);
 		void SetPosition(float x, float y);
 
 		TransformComponent* GetTransform() const { return m_Transform; }
+
+		void Delete() { m_MarkedForDelete = true; }
+		bool IsMarkedForDeletion() const { return m_MarkedForDelete; }
 
 		// Create and add a new component, returning a pointer to it
 		template <typename T, typename... TArgs>
@@ -48,8 +49,8 @@ namespace dae
 
 	private:
 		TransformComponent* m_Transform;
-		std::shared_ptr<Texture2D> m_Texture{};
 		std::vector<std::unique_ptr<Component>> m_Components{};
+		bool m_MarkedForDelete{ false };
 	};
 
 	
