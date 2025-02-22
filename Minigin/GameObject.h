@@ -26,9 +26,6 @@ namespace dae
 		template <typename T, typename... TArgs>
 		T* AddComponent(TArgs&&... args);
 
-		// Add an existing component (takes ownership)
-		template <typename T>
-		void AddComponent(std::unique_ptr<T> component);
 
 		// Remove a component by type
 		template <typename T>
@@ -65,14 +62,6 @@ namespace dae
 		return rawPtr;
 	}
 
-	// Implementation: Add an existing component
-	template <typename T>
-	void GameObject::AddComponent(std::unique_ptr<T> component)
-	{
-		static_assert(std::is_base_of_v<Component, T>, "T must be derived from Component");
-
-		m_Components.push_back(std::move(component)); 
-	}
 
 	// Implementation: Remove a component
 	template <typename T>
