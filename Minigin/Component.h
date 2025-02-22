@@ -17,6 +17,7 @@ namespace dae
 
         virtual void Update(float deltaTime);
         virtual void Render() const;
+        virtual void FixedUpdate();
 
         
     protected:

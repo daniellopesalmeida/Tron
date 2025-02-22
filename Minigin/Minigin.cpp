@@ -107,7 +107,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 		while (lag >= timePerFrame)
 		{
-			//sceneManager.FixedUpdate(); to implement
+			sceneManager.FixedUpdate();
 			lag -= timePerFrame;
 		}
 

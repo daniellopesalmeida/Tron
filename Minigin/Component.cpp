@@ -13,4 +13,8 @@ void dae::Component::Render() const
 
 }
 
+void dae::Component::FixedUpdate()
+{
+}
+
 

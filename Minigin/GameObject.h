@@ -9,10 +9,11 @@
 namespace dae
 {
 	
-	class GameObject final
+	class GameObject final: public std::enable_shared_from_this<GameObject>
 	{
 	public:
 		void Update(float deltaTime);
+		void FixedUpdate();
 		void Render() const;
 
 		void SetPosition(float x, float y);
@@ -21,11 +22,17 @@ namespace dae
 
 		void Delete() { m_MarkedForDelete = true; }
 		bool IsMarkedForDeletion() const { return m_MarkedForDelete; }
+		
+		void SetParent(std::shared_ptr<GameObject> parent);
+		void AddChild(std::shared_ptr<dae::GameObject> child);
+		void RemoveChild(std::shared_ptr<dae::GameObject> child);
+
+		GameObject* GetParent() const { return m_Parent; }
+		const std::vector<std::shared_ptr<GameObject>>& GetChildren() { return m_pChildren; }
 
 		// Create and add a new component, returning a pointer to it
 		template <typename T, typename... TArgs>
 		T* AddComponent(TArgs&&... args);
-
 
 		// Remove a component by type
 		template <typename T>
@@ -48,6 +55,8 @@ namespace dae
 		TransformComponent* m_Transform;
 		std::vector<std::unique_ptr<Component>> m_Components{};
 		bool m_MarkedForDelete{ false };
+		GameObject* m_Parent{ nullptr };
+		std::vector<std::shared_ptr<GameObject>> m_pChildren{};
 	};
 
 	
