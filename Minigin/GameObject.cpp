@@ -46,35 +46,47 @@ void dae::GameObject::SetParent(std::shared_ptr<GameObject> parent)
 	//Set the given parent on itself.
 	//Add itself as a child to the given parent(AddChild ? ).
 
-	if (parent.get() == this || std::find(m_pChildren.begin(), m_pChildren.end(), parent) != m_pChildren.end())
-	{
-		std::cerr << "Invalid parent assignment." << std::endl;
-		return;
-	}
-
 	if (m_Parent)
 	{
-		m_Parent->RemoveChild(this->shared_from_this());
+		m_Parent->RemoveChildFromContainer(this->shared_from_this());
 	}
 
 	m_Parent = parent.get();
 
 	if (m_Parent)
 	{
-		m_Parent->AddChild(this->shared_from_this());
+		m_Parent->AddChildToContainer(this->shared_from_this());
 	}
 
 	
 }
 
-void dae::GameObject::AddChild(std::shared_ptr<dae::GameObject> child)
+void dae::GameObject::AddChild(std::shared_ptr<GameObject> child)
 {
 	child->SetParent(this->shared_from_this());
-	m_pChildren.push_back(child);
 }
 
-void dae::GameObject::RemoveChild(std::shared_ptr<dae::GameObject> child)
+void dae::GameObject::RemoveChild(std::shared_ptr<GameObject> child)
+{
+    auto it = std::find(m_pChildren.begin(), m_pChildren.end(), child);
+    if (it != m_pChildren.end())
+    {
+        m_pChildren.erase(it);
+    }
+}
+
+void dae::GameObject::AddChildToContainer(std::shared_ptr<dae::GameObject> child)
+{
+	m_pChildren.emplace_back(child);
+}
+
+void dae::GameObject::RemoveChildFromContainer(std::shared_ptr<dae::GameObject> child)
 {
 	
 	std::erase(m_pChildren, child);
+}
+
+void dae::GameObject::PrintNrChildren(std::string name)
+{
+	std::cout << "nr of children of " <<name<<": "<< m_pChildren.size() << std::endl;
 }

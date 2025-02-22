@@ -29,7 +29,7 @@ void dae::FPSComponent::Update(float deltaTime)
         }
 
         m_FrameCount = 0;
-        m_ElapsedTime = 0.0f;
+        m_ElapsedTime -= 1.0f;
     }
 }
 

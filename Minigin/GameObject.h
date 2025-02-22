@@ -24,8 +24,12 @@ namespace dae
 		bool IsMarkedForDeletion() const { return m_MarkedForDelete; }
 		
 		void SetParent(std::shared_ptr<GameObject> parent);
-		void AddChild(std::shared_ptr<dae::GameObject> child);
-		void RemoveChild(std::shared_ptr<dae::GameObject> child);
+		void AddChild(std::shared_ptr<GameObject> child);
+		void RemoveChild(std::shared_ptr<GameObject> child);
+		void AddChildToContainer(std::shared_ptr<dae::GameObject> child);
+		void RemoveChildFromContainer(std::shared_ptr<dae::GameObject> child);
+
+		void PrintNrChildren(std::string name);
 
 		GameObject* GetParent() const { return m_Parent; }
 		const std::vector<std::shared_ptr<GameObject>>& GetChildren() { return m_pChildren; }
