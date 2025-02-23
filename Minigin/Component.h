@@ -19,6 +19,9 @@ namespace dae
         virtual void Render() const;
         virtual void FixedUpdate();
 
+        void Delete() { m_MarkedForDelete = true; }
+        bool IsMarkedForDeletion() const { return m_MarkedForDelete; }
+
         
     protected:
 
@@ -26,6 +29,7 @@ namespace dae
 
    private:
         GameObject* m_pOwner{ nullptr };
+        bool m_MarkedForDelete{ false };
        
     };
 }

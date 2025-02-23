@@ -23,8 +23,8 @@ namespace dae
 		void Delete() { m_MarkedForDelete = true; }
 		bool IsMarkedForDeletion() const { return m_MarkedForDelete; }
 		
-		void SetParent(std::shared_ptr<GameObject> parent);
-		void AddChild(std::shared_ptr<GameObject> child);
+		void SetParent(std::shared_ptr<GameObject> parent, bool keepWorldPos = false);
+		void AddChild(std::shared_ptr<GameObject> child, bool keepWorldPos = false);
 		void RemoveChild(std::shared_ptr<GameObject> child);
 		void AddChildToContainer(std::shared_ptr<dae::GameObject> child);
 		void RemoveChildFromContainer(std::shared_ptr<dae::GameObject> child);
@@ -42,9 +42,13 @@ namespace dae
 		template <typename T>
 		void RemoveComponent();
 
+		template <typename T> 
+		void RemoveComponent(T* comp);
+
 		// Get a component by type
 		template <typename T>
 		T* GetComponent() const;
+
 
 		GameObject();
 		~GameObject();
@@ -87,6 +91,19 @@ namespace dae
 				return dynamic_cast<T*>(component.get()) != nullptr;
 			});
 		m_Components.erase(it, m_Components.end());
+	}
+
+	template<typename T>
+	void GameObject::RemoveComponent(T* comp)
+	{
+		for (auto it = begin(m_Components); it != end(m_Components); ++it)
+		{
+			if (dynamic_cast<T*>(it->get()) == comp)
+			{
+				m_Components.erase(it);
+				break;
+			}
+		}
 	}
 
 	// Implementation: Get a component

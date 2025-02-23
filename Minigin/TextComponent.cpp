@@ -58,9 +58,9 @@ void dae::TextComponent::Render() const
 	const auto transform = GetOwner()->GetTransform();
 	if (transform != nullptr)
 	{
-		auto posX = transform->GetPosition().x;
-		auto posY = transform->GetPosition().y;
-		Renderer::GetInstance().RenderTexture(*m_TextTexture, posX, posY);
+		const auto& position = transform->GetWorldPosition();
+		
+		Renderer::GetInstance().RenderTexture(*m_TextTexture, position.x, position.y);
 
 	}
 	else

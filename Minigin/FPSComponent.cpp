@@ -2,8 +2,8 @@
 #include "GameObject.h"
 #include "TextComponent.h"
 
-dae::FPSComponent::FPSComponent(GameObject* gameObject)
-	:Component(gameObject)
+dae::FPSComponent::FPSComponent(GameObject* pOwner)
+	:Component(pOwner)
 {
 	m_pTextComponent = GetOwner()->GetComponent<dae::TextComponent>();
 }

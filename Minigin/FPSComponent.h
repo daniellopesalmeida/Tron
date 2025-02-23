@@ -9,7 +9,7 @@ namespace dae
 	{
 	public:
 
-		FPSComponent(GameObject* gameObject);
+		FPSComponent(GameObject* pOwner);
 		~FPSComponent() override = default;
 		FPSComponent(const FPSComponent& other) = delete;
 		FPSComponent(FPSComponent&& other) = delete;

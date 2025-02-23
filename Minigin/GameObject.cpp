@@ -19,17 +19,40 @@ dae::GameObject::~GameObject()
 
 void dae::GameObject::Update(float deltaTime)
 {
-	for (auto& comp : m_Components) comp->Update(deltaTime);
+	
+	for (const auto& comp : m_Components)
+	{
+		if (comp == nullptr) continue;
+		if (!comp->IsMarkedForDeletion())
+		{
+			comp->Update(deltaTime);
+		}
+		else
+		{
+			RemoveComponent(&comp);
+		}
+	}
 }
 
 void dae::GameObject::FixedUpdate()
 {
-	for (auto& comp : m_Components) comp->FixedUpdate();
+	for (const auto& comp : m_Components)
+	{
+		if (comp == nullptr) continue;
+		if (!comp->IsMarkedForDeletion())
+		{
+			comp->FixedUpdate();
+		}
+		else
+		{
+			RemoveComponent(&comp);
+		}
+	}
 }
 
 void dae::GameObject::Render() const
-{
-	for (auto& comp : m_Components) comp->Render();
+{	
+	for (const auto& comp : m_Components) comp->Render();
 }
 
 
@@ -38,13 +61,27 @@ void dae::GameObject::SetPosition(float x, float y)
 	m_Transform->SetPosition(x, y, 0.0f);
 }
 
-void dae::GameObject::SetParent(std::shared_ptr<GameObject> parent)
+void dae::GameObject::SetParent(std::shared_ptr<GameObject> parent, bool keepWorldPos)
 {
 	//Check if the new parent is valid (not itself or one of its children)
 	//Update position, rotation and scale
 	//Remove itself from the previous parent (RemoveChild ? ).
 	//Set the given parent on itself.
 	//Add itself as a child to the given parent(AddChild ? ).
+	if (parent)
+	{
+		if (keepWorldPos)
+		{
+			
+			m_Transform->SetPosition(m_Transform->GetLocalPosition() - parent->GetTransform()->GetWorldPosition());
+		}
+		m_Transform->SetPosDirty();
+		m_Transform->SetParent(parent->GetTransform());
+	}
+	else
+	{
+		m_Transform->SetPosition(m_Transform->GetWorldPosition());
+	}
 
 	if (m_Parent)
 	{
@@ -61,9 +98,9 @@ void dae::GameObject::SetParent(std::shared_ptr<GameObject> parent)
 	
 }
 
-void dae::GameObject::AddChild(std::shared_ptr<GameObject> child)
+void dae::GameObject::AddChild(std::shared_ptr<GameObject> child, bool keepWorldPos)
 {
-	child->SetParent(this->shared_from_this());
+	child->SetParent(this->shared_from_this(),keepWorldPos);
 }
 
 void dae::GameObject::RemoveChild(std::shared_ptr<GameObject> child)
@@ -90,3 +127,5 @@ void dae::GameObject::PrintNrChildren(std::string name)
 {
 	std::cout << "nr of children of " <<name<<": "<< m_pChildren.size() << std::endl;
 }
+
+
