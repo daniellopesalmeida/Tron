@@ -182,6 +182,7 @@
     <ClInclude Include="..\3rdParty\imgui-1.91.8\imconfig.h" />
     <ClInclude Include="..\3rdParty\imgui-1.91.8\imgui.h" />
     <ClInclude Include="..\3rdParty\imgui-1.91.8\imgui_internal.h" />
+    <ClInclude Include="..\3rdParty\imgui-1.91.8\imgui_plot.h" />
     <ClInclude Include="..\3rdParty\imgui-1.91.8\imstb_rectpack.h" />
     <ClInclude Include="..\3rdParty\imgui-1.91.8\imstb_textedit.h" />
     <ClInclude Include="..\3rdParty\imgui-1.91.8\imstb_truetype.h" />
@@ -200,7 +201,6 @@
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="TextComponent.h" />
     <ClInclude Include="Texture2D.h" />
-    <ClInclude Include="Transform.h" />
     <ClInclude Include="TransformComponent.h" />
   </ItemGroup>
   <ItemGroup>
@@ -209,6 +209,7 @@
     <ClCompile Include="..\3rdParty\imgui-1.91.8\imgui.cpp" />
     <ClCompile Include="..\3rdParty\imgui-1.91.8\imgui_demo.cpp" />
     <ClCompile Include="..\3rdParty\imgui-1.91.8\imgui_draw.cpp" />
+    <ClCompile Include="..\3rdParty\imgui-1.91.8\imgui_plot.cpp" />
     <ClCompile Include="..\3rdParty\imgui-1.91.8\imgui_tables.cpp" />
     <ClCompile Include="..\3rdParty\imgui-1.91.8\imgui_widgets.cpp" />
     <ClCompile Include="Component.cpp" />
@@ -226,7 +227,6 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="Texture2D.cpp" />
-    <ClCompile Include="Transform.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
