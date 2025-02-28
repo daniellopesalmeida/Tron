@@ -16,7 +16,7 @@ namespace dae
         Component& operator=(Component&&) noexcept = delete;
 
         virtual void Update(float deltaTime);
-        virtual void Render() const;
+        virtual void Render() ;
         virtual void FixedUpdate();
 
         void Delete() { m_MarkedForDelete = true; }

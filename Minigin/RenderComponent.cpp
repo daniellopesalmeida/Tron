@@ -11,7 +11,7 @@ dae::RenderComponent::RenderComponent(GameObject* pOwner)
 {
 }
 
-void dae::RenderComponent::Render() const
+void dae::RenderComponent::Render()
 {
 	const auto transform = GetOwner()->GetTransform();
 	

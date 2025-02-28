@@ -55,6 +55,6 @@ void dae::TransformComponent::Update(float)
 	
 }
 
-void dae::TransformComponent::Render() const
+void dae::TransformComponent::Render() 
 {
 }

@@ -33,6 +33,6 @@ void dae::FPSComponent::Update(float deltaTime)
     }
 }
 
-void dae::FPSComponent::Render() const
+void dae::FPSComponent::Render()
 {
 }

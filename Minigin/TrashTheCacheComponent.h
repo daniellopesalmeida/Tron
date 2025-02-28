@@ -1,10 +1,11 @@
 #pragma once
 #include "Component.h"
+#include <vector>
 
 namespace dae
 {
 
-	class TrashTheCacheComponent : public Component
+	class TrashTheCacheComponent final : public Component
 	{
 	public:
 		TrashTheCacheComponent(GameObject* pOwner);
@@ -14,7 +15,7 @@ namespace dae
 		TrashTheCacheComponent& operator=(const TrashTheCacheComponent& other) = delete;
 		TrashTheCacheComponent& operator=(TrashTheCacheComponent&& other) = delete;
 
-		void Render();
+		void Render() override;
 		void Update(float deltaTime);
 		void FixedUpdate();
 
@@ -48,6 +49,15 @@ namespace dae
 		void Ex1();
 		void Ex2();
 		void Ex2Alt();
+
+		void Ex1Calc(int sampleSize);
+		void Ex2Calc(int sampleSize);
+
+		std::vector<float> m_Ex1XData{};
+		std::vector<float> m_Ex1YData{};
+
+		std::vector<float> m_Ex2XData{};
+		std::vector<float> m_Ex2YData{};
 	};
 }
 

@@ -8,7 +8,7 @@ void dae::Component::Update(float)
 {
 }
 
-void dae::Component::Render() const
+void dae::Component::Render()
 {
 
 }

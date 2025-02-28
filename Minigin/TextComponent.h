@@ -24,7 +24,7 @@ namespace dae
         TextComponent& operator=(TextComponent&& other) = delete;
 
         void Update(float deltaTime) override;
-        void Render() const override;
+        void Render() override;
 
         void SetText(const std::string& text);
         void SetColor(const SDL_Color color);

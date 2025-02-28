@@ -17,7 +17,7 @@ namespace dae
 		FPSComponent& operator=(FPSComponent&& other) = delete;
 
 		void Update(float deltaTime) override;
-		void Render() const override;
+		void Render() override;
 
 		float getFPS() const { return m_Fps; }
 

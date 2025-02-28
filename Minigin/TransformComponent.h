@@ -28,7 +28,7 @@ namespace dae
 		void SetPosDirty() { m_IsPosDirty = true; }
 
 		void Update(float deltaTime) override;
-		void Render() const override;
+		void Render() override;
 
 	private:
 		glm::vec3 m_Position{};
