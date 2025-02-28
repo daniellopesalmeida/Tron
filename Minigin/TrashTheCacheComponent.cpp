@@ -69,7 +69,7 @@ void dae::TrashTheCacheComponent::Ex1()
         conf.values.xs = m_Ex1XData.data();
         conf.values.ys = m_Ex1YData.data();
         conf.values.count = static_cast<int>(m_Ex1XData.size()+1);
-        conf.scale.max = 1024;
+        conf.scale.max = *std::max_element(m_Ex1YData.begin(), m_Ex1YData.end());;
         ImGui::Plot("Exercise 1", conf);
     }
     ImGui::End();
@@ -89,12 +89,73 @@ void dae::TrashTheCacheComponent::Ex2()
     ImGui::Begin("Exercise 2", &windowActive, ImGuiWindowFlags_AlwaysAutoResize);
     ImGui::InputInt("# Samples", &sample);
 
+    ImGui::PlotConfig conf;
+    conf.scale.min = 0;
+    conf.tooltip.show = true;
+    conf.tooltip.format = "Stepsize:%.0f\nValue: %.0f";
+    conf.grid_x.show = false;
+    conf.grid_y.show = false;
+    conf.frame_size = ImVec2(200, 100);
+    conf.line_thickness = 2.0f;
 
+    if (ImGui::Button("Trash the Cache with GameObject3D"))
+    {
+        clickedBtn = true;
+    }
+    if (clickedBtn)
+    {
+        ImGui::Text("Wait for it...");
+        Ex2Calc(sample);
+        isCalculating = true;
+        clickedBtn = false;
+    }
+    if (isCalculating)
+    {
+        conf.values.color = ImColor(0, 255, 0);
+        conf.values.xs = m_Ex2XData.data();
+        conf.values.ys = m_Ex2YData.data();
+        conf.values.count = static_cast<int>(m_Ex2XData.size()+1);
+        conf.scale.max = *std::max_element(m_Ex2YData.begin(), m_Ex2YData.end());
+        ImGui::Plot("Exercise 2", conf);
+    }
+    if (ImGui::Button("Trash the Cache with GameObject3DAlt"))
+    {
+        clickedBtnAlt = true;
+        Ex2AltCalc(sample);
+        isCalculatingAlt = true;
+        clickedBtnAlt = false;
+    }
+    if (clickedBtnAlt)
+    {
+        ImGui::Text("Wait for it...");
+    }
+    if (isCalculatingAlt)
+    {
+        conf.values.color = ImColor(0, 0, 255);
+        conf.values.xs = m_Ex2XAltData.data();
+        conf.values.ys = m_Ex2YAltData.data();
+        conf.values.count = static_cast<int>(m_Ex2XAltData.size()+1);
+        conf.scale.max = *std::max_element(m_Ex2YAltData.begin(), m_Ex2YAltData.end());
+        ImGui::Plot("Exercise 2 Alt", conf);
+    }
+    if (isCalculatingAlt && isCalculating)
+    {
+        static const float* y_data[] = { m_Ex2YData.data(), m_Ex2YAltData.data() };
+        static ImU32 colors[2] = { ImColor(0, 255, 0), ImColor(0, 0, 255) };
+
+        ImGui::Text("Combined:");
+        conf.values.xs = m_Ex2XAltData.data();
+        conf.values.count = static_cast<int>(m_Ex2XAltData.size()+1);
+        conf.values.ys = nullptr; 
+        conf.values.ys_list = y_data;
+        conf.values.ys_count = 2;
+        conf.values.colors = colors;
+        float maxYNormal = *std::max_element(m_Ex2YData.begin(), m_Ex2YData.end());
+        float maxYAlt = *std::max_element(m_Ex2YAltData.begin(), m_Ex2YAltData.end());
+        conf.scale.max = std::max(maxYNormal, maxYAlt) * 1.1f; //Add 10% padding
+        ImGui::Plot("CombinedPlot", conf);
+    }
     ImGui::End();
-}
-
-void dae::TrashTheCacheComponent::Ex2Alt()
-{
 }
 
 void dae::TrashTheCacheComponent::Ex1Calc(int sampleSize)
@@ -149,6 +210,110 @@ void dae::TrashTheCacheComponent::Ex1Calc(int sampleSize)
     delete[] arr;
 }
 
-void dae::TrashTheCacheComponent::Ex2Calc(int )
+void dae::TrashTheCacheComponent::Ex2Calc(int sampleSize )
 {
+    m_Ex2XData.clear();
+    m_Ex2YData.clear();
+
+    const int size = 1 << 20;
+    GameObject3D* arr = new GameObject3D[size]();
+    
+    //std::cout << "size " << size << std::endl;
+
+    //std::cout << "StepSize, AvgTime(ms)\n";
+
+    for (int stepsize = 1; stepsize <= 1024; stepsize *= 2)
+    {
+        m_Ex2XData.push_back(static_cast<float>(stepsize));
+
+        //std::cout << m_ExXData.back() << std::endl;
+
+        std::vector<float> timings;
+
+        for (int sample = 0; sample < sampleSize; sample++)
+        {
+            auto start = std::chrono::high_resolution_clock::now();
+
+            for (int i = 0; i < size; i += stepsize)
+            {
+                arr[i].id *= 2;
+            }
+
+            auto end = std::chrono::high_resolution_clock::now();
+            float elapsedTime = static_cast<float>(std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
+
+            timings.push_back(elapsedTime);
+        }
+
+        std::sort(timings.begin(), timings.end());
+        timings.erase(timings.begin());
+        timings.pop_back();
+
+
+        float sum = 0.0;
+        for (float t : timings) sum += t;
+        float avgTime = sum / timings.size();
+        m_Ex2YData.push_back(avgTime);
+        //std::cout << stepsize << ";     " << avgTime << "\n";
+
+    }
+
+    delete[] arr;
+}
+
+void dae::TrashTheCacheComponent::Ex2AltCalc(int sampleSize )
+{
+    m_Ex2XAltData.clear();
+    m_Ex2YAltData.clear();
+
+    const int size = 1 << 20;
+    GameObject3DALT* arr = new GameObject3DALT[size]();
+    //Transform* trans= new Transform();
+    //for (auto i = 0; i < size; ++i)
+    //{
+    //    arr[i].local = *trans;
+    //}
+    
+
+    //std::cout << "size " << size << std::endl;
+
+    //std::cout << "StepSize, AvgTime(ms)\n";
+
+    for (int stepsize = 1; stepsize <= 1024; stepsize *= 2)
+    {
+        m_Ex2XAltData.push_back(static_cast<float>(stepsize));
+
+        //std::cout << m_ExXData.back() << std::endl;
+
+        std::vector<float> timings;
+
+        for (int sample = 0; sample < sampleSize; sample++)
+        {
+            auto start = std::chrono::high_resolution_clock::now();
+
+            for (int i = 0; i < size; i += stepsize)
+            {
+                arr[i].id *= 2;
+            }
+
+            auto end = std::chrono::high_resolution_clock::now();
+            float elapsedTime = static_cast<float>(std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
+
+            timings.push_back(elapsedTime);
+        }
+
+        std::sort(timings.begin(), timings.end());
+        timings.erase(timings.begin());
+        timings.pop_back();
+
+
+        float sum = 0.0;
+        for (float t : timings) sum += t;
+        float avgTime = sum / timings.size();
+        m_Ex2YAltData.push_back(avgTime);
+        //std::cout << stepsize << ";     " << avgTime << "\n";
+
+    }
+
+    delete[] arr;
 }

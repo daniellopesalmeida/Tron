@@ -48,16 +48,19 @@ namespace dae
 
 		void Ex1();
 		void Ex2();
-		void Ex2Alt();
 
 		void Ex1Calc(int sampleSize);
 		void Ex2Calc(int sampleSize);
+		void Ex2AltCalc(int sampleSize);
 
 		std::vector<float> m_Ex1XData{};
 		std::vector<float> m_Ex1YData{};
 
 		std::vector<float> m_Ex2XData{};
 		std::vector<float> m_Ex2YData{};
+
+		std::vector<float> m_Ex2XAltData{};
+		std::vector<float> m_Ex2YAltData{};
 	};
 }
 
