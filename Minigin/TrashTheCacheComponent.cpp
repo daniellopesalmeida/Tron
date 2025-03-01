@@ -39,38 +39,39 @@ void dae::TrashTheCacheComponent::Ex1()
 
     ImGui::Begin("Exercise 1", &windowActive, ImGuiWindowFlags_AlwaysAutoResize);
 
-    static int sample = 10;
+    static int sample = 20;
     ImGui::InputInt("# Samples", &sample);
 
     ImGui::PlotConfig conf;
     conf.scale.min = 0;
     conf.tooltip.show = true;
-    conf.tooltip.format = "Stepsize:%.0f\nValue: %.0f";
+    conf.tooltip.format = "Stepsize:%.0f\nValue: %.1f";
     conf.grid_x.show = false;
-    conf.grid_y.show = false;
+    conf.grid_y.show = true;
     conf.frame_size = ImVec2(200, 100);
     conf.line_thickness = 2.0f;
 
     if (ImGui::Button("Trash the Cache"))
     {
+        ImGui::Text("Wait for it...");
         clickedBtn = true;
     }
 
     if (clickedBtn)
     {
-        ImGui::Text("Wait for it...");
         Ex1Calc(sample);
         isCalculated = true;
         clickedBtn = false;
     }
     if (isCalculated)
     {
-        conf.values.color = ImColor(255, 165, 0);
+        conf.values.color = ImColor(255, 165, 0); //orange
         conf.values.xs = m_Ex1XData.data();
         conf.values.ys = m_Ex1YData.data();
         conf.values.count = static_cast<int>(m_Ex1XData.size()+1);
         conf.scale.max = *std::max_element(m_Ex1YData.begin(), m_Ex1YData.end());;
         ImGui::Plot("Exercise 1", conf);
+
     }
     ImGui::End();
 }
@@ -85,33 +86,34 @@ void dae::TrashTheCacheComponent::Ex2()
     static bool clickedBtnAlt{};
     static bool isCalculatingAlt{};
 
-    static int sample = 10;
+    static int sample = 20;
     ImGui::Begin("Exercise 2", &windowActive, ImGuiWindowFlags_AlwaysAutoResize);
     ImGui::InputInt("# Samples", &sample);
 
     ImGui::PlotConfig conf;
     conf.scale.min = 0;
     conf.tooltip.show = true;
-    conf.tooltip.format = "Stepsize:%.0f\nValue: %.0f";
+    conf.tooltip.format = "Stepsize:%.0f\nValue: %.1f";
     conf.grid_x.show = false;
-    conf.grid_y.show = false;
+    conf.grid_y.show = true;
     conf.frame_size = ImVec2(200, 100);
     conf.line_thickness = 2.0f;
 
     if (ImGui::Button("Trash the Cache with GameObject3D"))
     {
+        ImGui::Text("Wait for it...");
         clickedBtn = true;
     }
     if (clickedBtn)
     {
-        ImGui::Text("Wait for it...");
+       
         Ex2Calc(sample);
         isCalculating = true;
         clickedBtn = false;
     }
     if (isCalculating)
     {
-        conf.values.color = ImColor(0, 255, 0);
+        conf.values.color = ImColor(0, 255, 0); //green
         conf.values.xs = m_Ex2XData.data();
         conf.values.ys = m_Ex2YData.data();
         conf.values.count = static_cast<int>(m_Ex2XData.size()+1);
@@ -131,7 +133,7 @@ void dae::TrashTheCacheComponent::Ex2()
     }
     if (isCalculatingAlt)
     {
-        conf.values.color = ImColor(0, 0, 255);
+        conf.values.color = ImColor(0, 0, 255); //blue
         conf.values.xs = m_Ex2XAltData.data();
         conf.values.ys = m_Ex2YAltData.data();
         conf.values.count = static_cast<int>(m_Ex2XAltData.size()+1);
@@ -153,7 +155,7 @@ void dae::TrashTheCacheComponent::Ex2()
         float maxYNormal = *std::max_element(m_Ex2YData.begin(), m_Ex2YData.end());
         float maxYAlt = *std::max_element(m_Ex2YAltData.begin(), m_Ex2YAltData.end());
         conf.scale.max = std::max(maxYNormal, maxYAlt) * 1.1f; //Add 10% padding
-        ImGui::Plot("CombinedPlot", conf);
+        ImGui::Plot("Combined Plot", conf);
     }
     ImGui::End();
 }
@@ -199,7 +201,7 @@ void dae::TrashTheCacheComponent::Ex1Calc(int sampleSize)
         timings.pop_back(); 
 
         
-        float sum = 0.0;
+        float sum = 0.0f;
         for (float t : timings) sum += t;
         float avgTime = sum / timings.size();
         m_Ex1YData.push_back(avgTime);
@@ -268,12 +270,6 @@ void dae::TrashTheCacheComponent::Ex2AltCalc(int sampleSize )
 
     const int size = 1 << 20;
     GameObject3DALT* arr = new GameObject3DALT[size]();
-    //Transform* trans= new Transform();
-    //for (auto i = 0; i < size; ++i)
-    //{
-    //    arr[i].local = *trans;
-    //}
-    
 
     //std::cout << "size " << size << std::endl;
 
