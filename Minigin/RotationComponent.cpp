@@ -15,7 +15,7 @@ dae::RotationComponent::RotationComponent(GameObject* pOwner,  float radius, flo
 void dae::RotationComponent::Update(float deltaTime)
 {
 	m_CurrentAngle += m_RotationSpeed * deltaTime;
-	
+	//GetOwner()->GetTransform()->GetLocalPosition().x
 	GetOwner()->SetPosition( m_Position.x + cosf(m_CurrentAngle) * m_Radius, m_Position.y - sinf(m_CurrentAngle) * m_Radius );
 	
 }

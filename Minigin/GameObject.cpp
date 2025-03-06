@@ -73,7 +73,7 @@ void dae::GameObject::SetParent(std::shared_ptr<GameObject> parent, bool keepWor
 		if (keepWorldPos)
 		{
 			
-			m_Transform->SetPosition(m_Transform->GetLocalPosition() - parent->GetTransform()->GetWorldPosition());
+			m_Transform->SetPosition(m_Transform->GetWorldPosition() - parent->GetTransform()->GetWorldPosition());
 		}
 		m_Transform->SetPosDirty();
 		m_Transform->SetParent(parent->GetTransform());

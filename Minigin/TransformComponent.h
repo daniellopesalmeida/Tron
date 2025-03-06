@@ -31,7 +31,7 @@ namespace dae
 		void Render() override;
 
 	private:
-		glm::vec3 m_Position{};
+		//glm::vec3 m_Position{};
 		glm::vec3 m_LocalPosition{};
 		glm::vec3 m_WorldPosition{};
 
