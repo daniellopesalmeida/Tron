@@ -21,6 +21,7 @@ namespace dae
 		GameObjectCommand(GameObject* pGameObject) : Command(), m_pGameObject{ pGameObject } {};
 		virtual ~GameObjectCommand()=default;
 
+
 	protected:
 		GameObject* GetGameObject() const { return m_pGameObject; }
 
