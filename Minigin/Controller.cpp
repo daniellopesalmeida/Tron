@@ -4,6 +4,7 @@
 #include <iostream>
 
 
+
 class dae::Controller::ControllerImpl
 {
 public:
@@ -25,7 +26,7 @@ public:
             // If the controller is not connected
             if (m_WasConnected)
             {
-                std::cout << "Controller " << m_ControllerIdx + 1 << " disconnected." << std::endl;
+                std::cout << "Controller " << m_ControllerIdx  << " disconnected." << std::endl;
                 m_WasConnected = false; 
             }
             return;
@@ -33,7 +34,7 @@ public:
         // If the controller is connected
         if (!m_WasConnected)
         {
-            std::cout << "Controller " << m_ControllerIdx + 1 << " connected." << std::endl;
+            std::cout << "Controller " << m_ControllerIdx  << " connected." << std::endl;
             m_WasConnected = true;
         }
     }
@@ -54,6 +55,52 @@ public:
     {
         return m_CurrentState.Gamepad.wButtons & static_cast<WORD>(button);
     }
+
+    glm::vec2 GetLeftStick() const
+    {
+        XINPUT_STATE state;
+        ZeroMemory(&state, sizeof(XINPUT_STATE));
+
+        if (XInputGetState(m_ControllerIdx, &state) == ERROR_SUCCESS)
+        {
+            float normLX = fmaxf(-1.0f, (float)state.Gamepad.sThumbLX / 32767.0f);
+            float normLY = fmaxf(-1.0f, (float)state.Gamepad.sThumbLY / 32767.0f);
+
+            // Apply Deadzone
+            float deadzone = 0.2f;
+            glm::vec2 leftStick = {
+                (fabs(normLX) < deadzone) ? 0.0f : normLX,
+                (fabs(normLY) < deadzone) ? 0.0f : normLY
+            };
+
+            return leftStick;
+        }
+        return glm::vec2(0, 0);
+    }
+
+    glm::vec2 GetRightStick() const
+    {
+        XINPUT_STATE state;
+        ZeroMemory(&state, sizeof(XINPUT_STATE));
+
+        if (XInputGetState(m_ControllerIdx, &state) == ERROR_SUCCESS)
+        {
+            float normRX = fmaxf(-1.0f, (float)state.Gamepad.sThumbRX / 32767.0f);
+            float normRY = fmaxf(-1.0f, (float)state.Gamepad.sThumbRY / 32767.0f);
+
+            // Apply Deadzone
+            float deadzone = 0.2f;
+            glm::vec2 rightStick = {
+                (fabs(normRX) < deadzone) ? 0.0f : normRX,
+                (fabs(normRY) < deadzone) ? 0.0f : normRY
+            };
+
+            return rightStick;
+        }
+        return glm::vec2(0, 0);
+    }
+
+   
 
 private:
     int m_ControllerIdx;  //(0, 1, 2, 3 for up to 4 controllers)
@@ -90,4 +137,14 @@ bool dae::Controller::IsUpThisFrame(GamepadButton button)
 bool dae::Controller::IsPressed(GamepadButton button)
 {
 	return m_pImpl->IsPressed(button);
+}
+
+glm::vec2 dae::Controller::GetLeftStick() const
+{
+    return m_pImpl->GetLeftStick();
+}
+
+glm::vec2 dae::Controller::GetRightStick() const
+{
+    return m_pImpl->GetRightStick();
 }

@@ -1,6 +1,7 @@
 #pragma once
 //#include <Xinput.h>
 #include <memory>
+#include <glm.hpp>
 
 namespace dae
 {
@@ -26,7 +27,8 @@ namespace dae
             Start = 0x0010,           // XINPUT_GAMEPAD_START
             Back = 0x0020,            // XINPUT_GAMEPAD_BACK
             LeftThumb = 0x0040,       // XINPUT_GAMEPAD_LEFT_THUMB
-            RightThumb = 0x0080       // XINPUT_GAMEPAD_RIGHT_THUMB
+            RightThumb = 0x0080,      // XINPUT_GAMEPAD_RIGHT_THUMB
+
         };
     
         Controller(int controllerIdx);
@@ -37,6 +39,8 @@ namespace dae
         bool IsDownThisFrame(GamepadButton button);
         bool IsUpThisFrame(GamepadButton button);
         bool IsPressed(GamepadButton button);
+        glm::vec2 GetLeftStick() const;
+        glm::vec2 GetRightStick() const;
 
         int GetIndex() const { return m_ControllerIdx; }
     

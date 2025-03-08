@@ -15,6 +15,7 @@ namespace dae
 		Released
 	};
 
+
 	class InputManager final : public Singleton<InputManager>
 	{
 	public:
@@ -29,8 +30,8 @@ namespace dae
 		void AddController(int controllerIdx);
 		void RemoveController(int controllerIdx);
 		//void DetectAndAddControllers();
-		void AddControllerCommand(Controller::GamepadButton button, const KeyState state, std::unique_ptr<Command> command);
-		void RemoveControllerCommand(Controller::GamepadButton button, const KeyState state);
+		void AddControllerCommand(int controllerIdx,Controller::GamepadButton button, const KeyState state, std::unique_ptr<Command> command);
+		void RemoveControllerCommand(int controllerIdx,Controller::GamepadButton button, const KeyState state);
 		void UpdateControllerInput(float deltaTime);
 
 	private:
@@ -45,10 +46,10 @@ namespace dae
 		//controller
 		std::vector<std::unique_ptr<Controller>> m_Controllers;
 		
-		using ControllerKey = std::pair<Controller::GamepadButton, KeyState>;
+		using ControllerKey = std::tuple<int, Controller::GamepadButton, KeyState>;
 		using ControllerCommandsMap = std::map<ControllerKey, std::unique_ptr<Command>>;
 		
-		ControllerCommandsMap m_ControllerCommands;
+		std::map<ControllerKey, std::unique_ptr<Command>> m_ControllerCommands;
 		
 	};
 

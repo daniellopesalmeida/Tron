@@ -120,16 +120,16 @@ void dae::InputManager::RemoveController(int controllerIdx)
 //    }
 //}
 
-void dae::InputManager::AddControllerCommand(Controller::GamepadButton button, const KeyState state, std::unique_ptr<Command> command)
+void dae::InputManager::AddControllerCommand(int controllerIdx,Controller::GamepadButton button, const KeyState state, std::unique_ptr<Command> command)
 {
-    ControllerKey keyPair = std::make_pair(button, state);
-    m_ControllerCommands[keyPair] = std::move(command);
+    ControllerKey keyTuple = std::tuple(controllerIdx, button, state);
+    m_ControllerCommands[keyTuple] = std::move(command);
 }
 
-void dae::InputManager::RemoveControllerCommand(Controller::GamepadButton button, const KeyState state)
+void dae::InputManager::RemoveControllerCommand(int controllerIdx,Controller::GamepadButton button, const KeyState state)
 {
-    ControllerKey keyPair = std::make_pair(button, state);
-    m_ControllerCommands.erase(keyPair);
+    ControllerKey keyTuple = std::tuple(controllerIdx, button, state);
+    m_ControllerCommands.erase(keyTuple);
 }
 
 void dae::InputManager::UpdateControllerInput(float deltaTime)
@@ -137,31 +137,34 @@ void dae::InputManager::UpdateControllerInput(float deltaTime)
     for (auto& controller : m_Controllers)
     {
         controller->Update();
+        int controllerIdx = controller->GetIndex(); // Get the controller index
 
-        
-        for (auto& [button, command] : m_ControllerCommands)
+        for (auto& [key, command] : m_ControllerCommands)
         {
-            switch (button.second)
+            int assignedControllerIdx;
+            Controller::GamepadButton button;
+            KeyState state;
+            std::tie(assignedControllerIdx, button, state) = key; // Extract values
+
+            if (controllerIdx == assignedControllerIdx) // Ensure the correct controller executes the command
             {
-            case KeyState::Pressed:
-                if (controller->IsDownThisFrame(button.first))  // Button pressed
+                switch (state)
                 {
-                    command->Execute(deltaTime);
+                case KeyState::Pressed:
+                    if (controller->IsDownThisFrame(button))
+                        command->Execute(deltaTime);
+                    break;
+                case KeyState::Down:
+                    if (controller->IsPressed(button))
+                        command->Execute(deltaTime);
+                    break;
+                case KeyState::Released:
+                    if (controller->IsUpThisFrame(button))
+                        command->Execute(deltaTime);
+                    break;
                 }
-                break;
-            case KeyState::Down:
-                if (controller->IsPressed(button.first))  // Button is held down
-                {
-                    command->Execute(deltaTime);
-                }
-                break;
-            case KeyState::Released:
-                if (controller->IsUpThisFrame(button.first))  // Button released
-                {
-                    command->Execute(deltaTime);
-                }
-                break;
             }
         }
+        
     }
 }
