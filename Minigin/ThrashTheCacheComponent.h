@@ -5,15 +5,15 @@
 namespace dae
 {
 
-	class TrashTheCacheComponent final : public Component
+	class ThrashTheCacheComponent final : public Component
 	{
 	public:
-		TrashTheCacheComponent(GameObject* pOwner);
-		~TrashTheCacheComponent() override = default;
-		TrashTheCacheComponent(const TrashTheCacheComponent& other) = delete;
-		TrashTheCacheComponent(TrashTheCacheComponent&& other) = delete;
-		TrashTheCacheComponent& operator=(const TrashTheCacheComponent& other) = delete;
-		TrashTheCacheComponent& operator=(TrashTheCacheComponent&& other) = delete;
+		ThrashTheCacheComponent(GameObject* pOwner);
+		~ThrashTheCacheComponent() override = default;
+		ThrashTheCacheComponent(const ThrashTheCacheComponent& other) = delete;
+		ThrashTheCacheComponent(ThrashTheCacheComponent&& other) = delete;
+		ThrashTheCacheComponent& operator=(const ThrashTheCacheComponent& other) = delete;
+		ThrashTheCacheComponent& operator=(ThrashTheCacheComponent&& other) = delete;
 
 		void Render() override;
 		void Update(float deltaTime);

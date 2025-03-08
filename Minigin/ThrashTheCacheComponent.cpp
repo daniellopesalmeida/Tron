@@ -1,4 +1,4 @@
-#include "TrashTheCacheComponent.h"
+#include "ThrashTheCacheComponent.h"
 #include <imgui.h>
 #include <imgui_plot.h>
 #include <vector>
@@ -8,26 +8,26 @@
 #include <map>
 #include <iostream>
 
-dae::TrashTheCacheComponent::TrashTheCacheComponent(GameObject* pOwner)
+dae::ThrashTheCacheComponent::ThrashTheCacheComponent(GameObject* pOwner)
     :Component{pOwner}
 {
 }
 
-void dae::TrashTheCacheComponent::Render() 
+void dae::ThrashTheCacheComponent::Render() 
 {
     Ex1();
     Ex2();
 }
 
-void dae::TrashTheCacheComponent::Update(float )
+void dae::ThrashTheCacheComponent::Update(float )
 {
 }
 
-void dae::TrashTheCacheComponent::FixedUpdate()
+void dae::ThrashTheCacheComponent::FixedUpdate()
 {
 }
 
-void dae::TrashTheCacheComponent::Ex1()
+void dae::ThrashTheCacheComponent::Ex1()
 {
     //std::cout << "Ex1() is being called!\n";
     bool windowActive{true};
@@ -51,7 +51,7 @@ void dae::TrashTheCacheComponent::Ex1()
     conf.frame_size = ImVec2(200, 100);
     conf.line_thickness = 2.0f;
 
-    if (ImGui::Button("Trash the Cache"))
+    if (ImGui::Button("Thrash the Cache"))
     {
         ImGui::Text("Wait for it...");
         clickedBtn = true;
@@ -76,7 +76,7 @@ void dae::TrashTheCacheComponent::Ex1()
     ImGui::End();
 }
 
-void dae::TrashTheCacheComponent::Ex2()
+void dae::ThrashTheCacheComponent::Ex2()
 {
     bool windowActive{ true };
 
@@ -99,7 +99,7 @@ void dae::TrashTheCacheComponent::Ex2()
     conf.frame_size = ImVec2(200, 100);
     conf.line_thickness = 2.0f;
 
-    if (ImGui::Button("Trash the Cache with GameObject3D"))
+    if (ImGui::Button("Thrash the Cache with GameObject3D"))
     {
         ImGui::Text("Wait for it...");
         clickedBtn = true;
@@ -120,7 +120,7 @@ void dae::TrashTheCacheComponent::Ex2()
         conf.scale.max = *std::max_element(m_Ex2YData.begin(), m_Ex2YData.end());
         ImGui::Plot("Exercise 2", conf);
     }
-    if (ImGui::Button("Trash the Cache with GameObject3DAlt"))
+    if (ImGui::Button("Thrash the Cache with GameObject3DAlt"))
     {
         clickedBtnAlt = true;
         Ex2AltCalc(sample);
@@ -160,7 +160,7 @@ void dae::TrashTheCacheComponent::Ex2()
     ImGui::End();
 }
 
-void dae::TrashTheCacheComponent::Ex1Calc(int sampleSize)
+void dae::ThrashTheCacheComponent::Ex1Calc(int sampleSize)
 {
     m_Ex1XData.clear();
     m_Ex1YData.clear();
@@ -212,7 +212,7 @@ void dae::TrashTheCacheComponent::Ex1Calc(int sampleSize)
     delete[] arr;
 }
 
-void dae::TrashTheCacheComponent::Ex2Calc(int sampleSize )
+void dae::ThrashTheCacheComponent::Ex2Calc(int sampleSize )
 {
     m_Ex2XData.clear();
     m_Ex2YData.clear();
@@ -263,7 +263,7 @@ void dae::TrashTheCacheComponent::Ex2Calc(int sampleSize )
     delete[] arr;
 }
 
-void dae::TrashTheCacheComponent::Ex2AltCalc(int sampleSize )
+void dae::ThrashTheCacheComponent::Ex2AltCalc(int sampleSize )
 {
     m_Ex2XAltData.clear();
     m_Ex2YAltData.clear();
