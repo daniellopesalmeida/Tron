@@ -18,12 +18,12 @@ namespace dae
 	{
 	public:
 
-		bool ProcessInput();
+		bool ProcessInput(float deltaTime);
 
 		void AddKeyboardCommand(const SDL_Scancode key, const KeyState state, std::unique_ptr<Command> command);
 		void RemoveKeyboardCommand(const SDL_Scancode key, const KeyState state);
 
-		void UpdateKeyboardInput();
+		void UpdateKeyboardInput(float deltaTime);
 
 	private:
 		std::unique_ptr<Keyboard> m_Keyboard{ std::make_unique<Keyboard>() };

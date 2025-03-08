@@ -2,7 +2,7 @@
 #include "InputManager.h"
 #include <backends/imgui_impl_sdl2.h>
 
-bool dae::InputManager::ProcessInput()
+bool dae::InputManager::ProcessInput(float deltaTime)
 {
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {
@@ -20,7 +20,7 @@ bool dae::InputManager::ProcessInput()
 		//process event forImgui
 		ImGui_ImplSDL2_ProcessEvent(&e);
 	}
-	UpdateKeyboardInput();
+	UpdateKeyboardInput(deltaTime);
 
 	return true;
 }
@@ -37,7 +37,7 @@ void dae::InputManager::RemoveKeyboardCommand(const SDL_Scancode key, const KeyS
 	m_KeyboardCommands.erase(keyPair);
 }
 
-void dae::InputManager::UpdateKeyboardInput()
+void dae::InputManager::UpdateKeyboardInput(float deltaTime)
 {
     m_Keyboard->Update();
 
@@ -49,17 +49,17 @@ void dae::InputManager::UpdateKeyboardInput()
         {
         case KeyState::Pressed:
             if (m_Keyboard->IsDownThisFrame(scancode)) 
-                command->Execute();
+                command->Execute(deltaTime);
             break;
 
         case KeyState::Released:
             if (m_Keyboard->IsUpThisFrame(scancode))
-                command->Execute();
+                command->Execute(deltaTime);
             break;
 
         case KeyState::Down:
             if (m_Keyboard->IsPressed(scancode))
-                command->Execute();
+                command->Execute(deltaTime);
             break;
         }
     }
