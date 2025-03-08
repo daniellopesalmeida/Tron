@@ -55,5 +55,26 @@ namespace dae
 		glm::vec2 m_Direction;
 		float m_Speed;
     };
+
+	class Debug final : public GameObjectCommand
+	{
+
+	public:
+		Debug(GameObject* pGameObject,std::string message)
+			: GameObjectCommand(pGameObject), m_Message(message)
+		{
+		};
+
+		~Debug() = default;
+
+		void Execute(float ) override
+		{
+			std::cout << "[Debug] Key Pressed: "<<m_Message << std::endl;
+
+		}
+
+	private:
+		std::string m_Message;
+	};
 }
 
