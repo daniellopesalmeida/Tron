@@ -25,7 +25,7 @@ void dae::FPSComponent::Update(float deltaTime)
 
         if (m_pTextComponent)
         {
-            m_pTextComponent->SetText("FPS: " + std::to_string(m_Fps));
+            m_pTextComponent->SetText("FPS: " + std::to_string(static_cast<int>(m_Fps)));
         }
 
         m_FrameCount = 0;

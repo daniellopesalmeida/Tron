@@ -72,24 +72,21 @@ void dae::InputManager::UpdateKeyboardInput(float deltaTime)
 
 void dae::InputManager::AddController(int controllerIdx)
 {
-    // Check if controller already exists
     for (const auto& controller : m_Controllers)
     {
         if (controller->GetIndex() == controllerIdx) 
         {
-            std::cout << "Controller " << controllerIdx << " is already added.\n";
+            std::cout << "Controller " << controllerIdx << " is already assigned.\n";
             return;
         }
     }
 
-    // Add new controller
     m_Controllers.push_back(std::make_unique<Controller>(controllerIdx));
-    std::cout << "Controller " << controllerIdx << " added.\n";
+    std::cout << "Controller " << controllerIdx << " assigned.\n";
 }
 
 void dae::InputManager::RemoveController(int controllerIdx)
 {
-    // Remove controller by index
     m_Controllers.erase(
         std::remove_if(m_Controllers.begin(), m_Controllers.end(),
             [controllerIdx](const std::unique_ptr<Controller>& controller)
@@ -104,18 +101,18 @@ void dae::InputManager::RemoveController(int controllerIdx)
 
 //void dae::InputManager::DetectAndAddControllers()
 //{
-//    for (int i = 0; i < 4; ++i) // XInput supports up to 4 controllers
+//    for (int i = 0; i < 4; ++i) 
 //    {
 //        XINPUT_STATE state;
 //        ZeroMemory(&state, sizeof(XINPUT_STATE));
 //
-//        if (XInputGetState(i, &state) == ERROR_SUCCESS) // Controller is connected
+//        if (XInputGetState(i, &state) == ERROR_SUCCESS) 
 //        {
-//            AddController(i); // Add the controller to InputManager
+//            AddController(i); 
 //        }
 //        else
 //        {
-//            RemoveController(i); // Optionally remove the controller if it's disconnected
+//            RemoveController(i);
 //        }
 //    }
 //}
@@ -137,16 +134,16 @@ void dae::InputManager::UpdateControllerInput(float deltaTime)
     for (auto& controller : m_Controllers)
     {
         controller->Update();
-        int controllerIdx = controller->GetIndex(); // Get the controller index
+        int controllerIdx = controller->GetIndex();
 
         for (auto& [key, command] : m_ControllerCommands)
         {
             int assignedControllerIdx;
             Controller::GamepadButton button;
             KeyState state;
-            std::tie(assignedControllerIdx, button, state) = key; // Extract values
+            std::tie(assignedControllerIdx, button, state) = key;
 
-            if (controllerIdx == assignedControllerIdx) // Ensure the correct controller executes the command
+            if (controllerIdx == assignedControllerIdx) 
             {
                 switch (state)
                 {
