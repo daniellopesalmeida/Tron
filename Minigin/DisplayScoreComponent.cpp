@@ -18,6 +18,14 @@ void dae::DisplayScoreComponent::OnNotify(GameObject* entity, Event event)
             m_TextComponent->SetText(m_ScoreText);
         }
     }
+    if (event == Event::RESET_ACHIEVEMENTS)
+    {
+        if (auto statsComponent = entity->GetComponent<PlayerStatsComponent>())
+        {
+            m_ScoreText = "Score: " + std::to_string(statsComponent->GetScore());
+            m_TextComponent->SetText(m_ScoreText);
+        }
+    }
 }
 
 void dae::DisplayScoreComponent::Update(float )

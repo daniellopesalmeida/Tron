@@ -27,6 +27,14 @@ void dae::DisplayHealthComponent::OnNotify(GameObject* entity, Event event)
 		m_healthText = "Player Died!";
 		m_TextComponent->SetText(m_healthText);
 	}
+	else if (event == Event::RESET_ACHIEVEMENTS)
+	{
+		if (auto statsComponent = entity->GetComponent<PlayerStatsComponent>())
+		{
+			m_healthText = "Health: " + std::to_string(statsComponent->GetHealth());
+			m_TextComponent->SetText(m_healthText);
+		}
+	}
 }
 
 void dae::DisplayHealthComponent::Update(float)

@@ -4,8 +4,9 @@
 
 
 dae::PlayerStatsComponent::PlayerStatsComponent(GameObject* pOwner, int maxHealth, int initialScore)
-	: Component(pOwner), m_Health(maxHealth), m_Score(initialScore)
+	: Component(pOwner), m_MaxHealth(maxHealth), m_Score(initialScore)
 {
+    m_Health = m_MaxHealth;
 	m_PlayerStatsSubject = std::make_unique<Subject>();
 }
 
@@ -29,6 +30,13 @@ void dae::PlayerStatsComponent::TakeDamage(int amount)
     {
         m_PlayerStatsSubject->Notify(GetOwner(), Event::PLAYER_HIT);
     }
+}
+
+void dae::PlayerStatsComponent::ResetStats()
+{
+    m_Health = m_MaxHealth;
+    m_Score = 0;
+    m_PlayerStatsSubject->Notify(GetOwner(), Event::RESET_ACHIEVEMENTS);
 }
 
 void dae::PlayerStatsComponent::AddObserver(Observer* observer)

@@ -217,6 +217,8 @@ xcopy "$(SolutionDir)3rdParty\sdk\steam_appid.txt" "$(OutputPath)" /Y</Command>
     <ClInclude Include="Command.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Controller.h" />
+    <ClInclude Include="CSteamAchievements.h" />
+    <ClInclude Include="DisplayAchievementsComponent.h" />
     <ClInclude Include="DisplayHealthComponent.h" />
     <ClInclude Include="DisplayScoreComponent.h" />
     <ClInclude Include="Font.h" />
@@ -252,6 +254,8 @@ xcopy "$(SolutionDir)3rdParty\sdk\steam_appid.txt" "$(OutputPath)" /Y</Command>
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="CSteamAchievements.cpp" />
+    <ClCompile Include="DisplayAchievementsComponent.cpp" />
     <ClCompile Include="DisplayHealthComponent.cpp" />
     <ClCompile Include="DisplayScoreComponent.cpp" />
     <ClCompile Include="Font.cpp" />

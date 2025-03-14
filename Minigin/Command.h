@@ -120,5 +120,17 @@ namespace dae
 
 	};
 
+	class ResetAchievements : public GameObjectCommand
+	{
+	public:
+		ResetAchievements(GameObject* pGameObject)
+			: GameObjectCommand(pGameObject)
+		{
+		}
+		void Execute(float) override
+		{
+			GetGameObject()->GetComponent<PlayerStatsComponent>()->ResetStats();
+		}
+	};
 }
 

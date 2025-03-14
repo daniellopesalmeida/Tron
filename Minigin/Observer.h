@@ -5,7 +5,8 @@ namespace dae
 	{
 		PLAYER_HIT,  //player takes dmg
 		COLLECT_POINTS,  //player collects points
-		PLAYER_DIED  //player died
+		PLAYER_DIED,  //player died
+		RESET_ACHIEVEMENTS  //reset achievements
 	};
 
 	class GameObject;

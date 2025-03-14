@@ -15,6 +15,7 @@ namespace dae
 
         void AddScore(int amount);
         void TakeDamage(int amount);
+        void ResetStats();
 
         int GetScore() const { return m_Score; }
         int GetHealth() const { return m_Health; }
@@ -23,6 +24,7 @@ namespace dae
         void RemoveObserver(Observer* observer);
 
     private:
+        int m_MaxHealth;
         int m_Health;
         int m_Score;
         std::unique_ptr<Subject> m_PlayerStatsSubject;
