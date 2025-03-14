@@ -12,6 +12,7 @@
 #include <chrono>
 #include "Time.h"
 #include "thread"
+#include <steam_api.h>
 
 SDL_Window* g_window{};
 
@@ -98,6 +99,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 	while (doContinue)
 	{
+		SteamAPI_RunCallbacks();
 		auto currentTime= std::chrono::steady_clock::now();
 		const float deltaTime = std::chrono::duration<float>(currentTime - previousTime).count();
 
