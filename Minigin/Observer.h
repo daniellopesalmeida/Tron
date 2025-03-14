@@ -1,7 +1,7 @@
 #pragma once
 namespace dae
 {
-	enum Event
+	enum class Event
 	{
 		PLAYER_HIT,  //player takes dmg
 		COLLECT_POINTS,  //player collects points

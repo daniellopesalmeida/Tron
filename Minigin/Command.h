@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include <iostream>
+#include "PlayerStatsComponent.h"
 
 namespace dae
 {
@@ -76,5 +77,48 @@ namespace dae
 	private:
 		std::string m_Message;
 	};
+
+	class TakeDamage final : public GameObjectCommand
+	{
+
+	public:
+		TakeDamage(GameObject* pGameObject)
+			: GameObjectCommand(pGameObject)
+		{
+		};
+
+		~TakeDamage() = default;
+
+		void Execute(float) override
+		{
+			
+			GetGameObject()->GetComponent<PlayerStatsComponent>()->TakeDamage(1);
+		}
+
+	private:
+		
+	};
+
+	class IncreaseScore final : public GameObjectCommand
+	{
+
+	public:
+		IncreaseScore(GameObject* pGameObject)
+			: GameObjectCommand(pGameObject)
+		{
+		};
+
+		~IncreaseScore() = default;
+
+		void Execute(float) override
+		{
+
+			GetGameObject()->GetComponent<PlayerStatsComponent>()->AddScore(20);
+		}
+
+	private:
+
+	};
+
 }
 

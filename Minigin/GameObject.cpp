@@ -19,7 +19,11 @@ dae::GameObject::~GameObject()
 
 void dae::GameObject::Update(float deltaTime)
 {
-	
+	for (const auto& child : m_pChildren)
+	{
+		child->Update(deltaTime);
+	}
+
 	for (const auto& comp : m_Components)
 	{
 		if (comp == nullptr) continue;
@@ -52,6 +56,11 @@ void dae::GameObject::FixedUpdate()
 
 void dae::GameObject::Render() const
 {	
+	for (const auto& child : m_pChildren)
+	{
+		child->Render();
+	}
+
 	for (const auto& comp : m_Components) comp->Render();
 }
 

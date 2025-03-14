@@ -11,7 +11,11 @@ namespace dae
 	public:
 		Subject() = default;
 		~Subject() = default;
-		//rule of five
+		
+		Subject(const Subject&) = delete;
+		Subject& operator=(const Subject&) = delete;
+		Subject(Subject&&) = delete;
+		Subject& operator=(Subject&&) = delete;
 
 		void AddObserver(Observer* observer);
 		void RemoveObserver(Observer* observer);
