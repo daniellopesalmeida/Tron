@@ -55,7 +55,7 @@ void dae::CSteamAchievements::OnUserStatsReceived(UserStatsReceived_t* pCallback
 		if (k_EResultOK == pCallback->m_eResult)
 		{
 			//OutputDebugString("Received stats and achievements from Steam\n");
-			std::cout << "Received stats and achievements from Steam" << std::endl;
+			std::cout << "Received stats and achievements from Steam\n" << std::endl;
 			m_bInitialized = true;
 
 			// load achievements
@@ -108,6 +108,6 @@ void dae::CSteamAchievements::OnAchievementStored(UserAchievementStored_t* pCall
 	if (m_iAppID == pCallback->m_nGameID)
 	{
 		//OutputDebugString("Stored Achievement for Steam\n");
-		std::cout << "Stored Achievement for Steam" << std::endl;
+		std::cout << "Stored Achievement for Steam\n" << std::endl;
 	}
 }

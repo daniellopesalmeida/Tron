@@ -12,25 +12,30 @@ dae::DisplayAchievementsComponent::DisplayAchievementsComponent(GameObject* pOwn
 
 void dae::DisplayAchievementsComponent::OnNotify(GameObject* entity, Event event)
 {
-	if (event == Event::COLLECT_POINTS)
-	{
-		if(entity->GetComponent<PlayerStatsComponent>() && !m_AchievementUnlocked)
-		{
-			if (entity->GetComponent<PlayerStatsComponent>()->GetScore() >= m_AchievementScore)
-			{
-				SteamUserStats()->SetAchievement("ACH_WIN_ONE_GAME");
-				SteamUserStats()->StoreStats();
-				m_AchievementUnlocked = true;
-			}
-		}
-	}
-	else if (event == Event::RESET_ACHIEVEMENTS)
-	{
-		std::cout << "Resetting all achievements..." << std::endl;
-		SteamUserStats()->ResetAllStats(true);
-		SteamUserStats()->StoreStats();
-		m_AchievementUnlocked = false;
-	}
+    switch (event)
+    {
+    case Event::COLLECT_POINTS:
+    {
+        auto statsComponent = entity->GetComponent<PlayerStatsComponent>();
+        if (statsComponent && !m_AchievementUnlocked && statsComponent->GetScore() >= m_AchievementScore)
+        {
+            SteamUserStats()->SetAchievement("ACH_WIN_ONE_GAME");
+            SteamUserStats()->StoreStats();
+            m_AchievementUnlocked = true;
+        }
+        break;
+    }
+
+    case Event::RESET_ACHIEVEMENTS:
+        std::cout << "Resetting all achievements..." << std::endl;
+        SteamUserStats()->ResetAllStats(true);
+        SteamUserStats()->StoreStats();
+        m_AchievementUnlocked = false;
+        break;
+
+    default:
+        break;
+    }
 }
 
 void dae::DisplayAchievementsComponent::Update(float )

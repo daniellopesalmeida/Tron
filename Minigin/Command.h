@@ -49,7 +49,7 @@ namespace dae
 			pos.y += m_Direction.y * m_Speed * deltaTime;
 			GetGameObject()->SetPosition(pos.x, pos.y);
 
-			std::cout << "Moved GameObject to (" << pos.x << ", " << pos.y << ")" << std::endl;
+			//std::cout << "Moved GameObject to (" << pos.x << ", " << pos.y << ")" << std::endl;
         }
 
     private:

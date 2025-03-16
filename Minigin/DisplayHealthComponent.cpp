@@ -14,27 +14,25 @@ dae::DisplayHealthComponent::DisplayHealthComponent(GameObject* pOwner)
 
 void dae::DisplayHealthComponent::OnNotify(GameObject* entity, Event event)
 {
-	if (event == Event::PLAYER_HIT)
-	{
-		if (auto statsComponent = entity->GetComponent<PlayerStatsComponent>())
-		{
-			m_healthText = "Health: " + std::to_string(statsComponent->GetHealth());
-			m_TextComponent->SetText(m_healthText);
-		}
-	}
-	else if (event == Event::PLAYER_DIED)
-	{
-		m_healthText = "Player Died!";
-		m_TextComponent->SetText(m_healthText);
-	}
-	else if (event == Event::RESET_ACHIEVEMENTS)
-	{
-		if (auto statsComponent = entity->GetComponent<PlayerStatsComponent>())
-		{
-			m_healthText = "Health: " + std::to_string(statsComponent->GetHealth());
-			m_TextComponent->SetText(m_healthText);
-		}
-	}
+    switch (event)
+    {
+    case Event::PLAYER_HIT:
+    case Event::RESET_ACHIEVEMENTS:
+        if (auto statsComponent = entity->GetComponent<PlayerStatsComponent>())
+        {
+            m_healthText = "Health: " + std::to_string(statsComponent->GetHealth());
+            m_TextComponent->SetText(m_healthText);
+        }
+        break;
+
+    case Event::PLAYER_DIED:
+        m_healthText = "Player Died!";
+        m_TextComponent->SetText(m_healthText);
+        break;
+
+    default:
+        break;
+    }
 }
 
 void dae::DisplayHealthComponent::Update(float)
