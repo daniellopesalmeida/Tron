@@ -5,6 +5,7 @@
 #include <map>
 #include "Singleton.h"
 
+
 namespace dae
 {
 	class Texture2D;
