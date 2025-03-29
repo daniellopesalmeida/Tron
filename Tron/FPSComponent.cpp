@@ -1,14 +1,14 @@
 #include "FPSComponent.h"
 #include "GameObject.h"
-#include "TextComponent.h"
 
-dae::FPSComponent::FPSComponent(GameObject* pOwner)
+
+FPSComponent::FPSComponent(dae::GameObject* pOwner)
 	:Component(pOwner)
 {
 	m_pTextComponent = GetOwner()->GetComponent<dae::TextComponent>();
 }
 
-void dae::FPSComponent::Update(float deltaTime)
+void FPSComponent::Update(float deltaTime)
 {
 	//m_Fps = 1 / deltaTime;
 	//if (m_pTextComponent)
@@ -33,6 +33,6 @@ void dae::FPSComponent::Update(float deltaTime)
     }
 }
 
-void dae::FPSComponent::Render()
+void FPSComponent::Render()
 {
 }

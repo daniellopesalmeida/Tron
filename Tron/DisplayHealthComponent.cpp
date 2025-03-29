@@ -1,23 +1,23 @@
 #include "DisplayHealthComponent.h"
 #include "GameObject.h" 
 #include "PlayerStatsComponent.h"
-#include "TextComponent.h"
 
-dae::DisplayHealthComponent::DisplayHealthComponent(GameObject* pOwner)
+
+DisplayHealthComponent::DisplayHealthComponent(dae::GameObject* pOwner)
 	:Component(pOwner), m_healthText{""}
 {
 	
-	m_TextComponent = pOwner->GetComponent<TextComponent>();
+	m_TextComponent = pOwner->GetComponent<dae::TextComponent>();
 	//m_healthText=m_TextComponent->GetText();
 	
 }
 
-void dae::DisplayHealthComponent::OnNotify(GameObject* entity, Event event)
+void DisplayHealthComponent::OnNotify(dae::GameObject* entity, dae::Event event)
 {
     switch (event)
     {
-    case Event::PLAYER_HIT:
-    case Event::RESET_ACHIEVEMENTS:
+    case dae::Event::PLAYER_HIT:
+    case dae::Event::RESET_ACHIEVEMENTS:
         if (auto statsComponent = entity->GetComponent<PlayerStatsComponent>())
         {
             m_healthText = "Health: " + std::to_string(statsComponent->GetHealth());
@@ -25,7 +25,7 @@ void dae::DisplayHealthComponent::OnNotify(GameObject* entity, Event event)
         }
         break;
 
-    case Event::PLAYER_DIED:
+    case dae::Event::PLAYER_DIED:
         m_healthText = "Player Died!";
         m_TextComponent->SetText(m_healthText);
         break;
@@ -35,14 +35,14 @@ void dae::DisplayHealthComponent::OnNotify(GameObject* entity, Event event)
     }
 }
 
-void dae::DisplayHealthComponent::Update(float)
+void DisplayHealthComponent::Update(float)
 {
 }
 
-void dae::DisplayHealthComponent::Render()
+void DisplayHealthComponent::Render()
 {
 }
 
-void dae::DisplayHealthComponent::FixedUpdate()
+void DisplayHealthComponent::FixedUpdate()
 {
 }

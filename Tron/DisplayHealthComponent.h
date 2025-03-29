@@ -2,24 +2,24 @@
 #include "Component.h"
 #include "Observer.h"
 #include <string>
-namespace dae
-{
+#include "TextComponent.h"
+
     class TextComponent;
-	class DisplayHealthComponent : public Component, public Observer
+	class DisplayHealthComponent : public dae::Component, public dae::Observer
 	{
     public:
-        DisplayHealthComponent(GameObject* pOwner);
+        DisplayHealthComponent(dae::GameObject* pOwner);
         ~DisplayHealthComponent() override = default;
 
-        void OnNotify(GameObject* entity, Event event) override;
+        void OnNotify(dae::GameObject* entity, dae::Event event) override;
 
         void Update(float deltaTime)override;
         void Render() override;
         void FixedUpdate()override;
 
     private:
-        TextComponent* m_TextComponent;
+        dae::TextComponent* m_TextComponent;
         std::string m_healthText;
 	};
-}
+
 

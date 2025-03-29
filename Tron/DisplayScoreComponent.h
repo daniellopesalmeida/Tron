@@ -2,25 +2,25 @@
 #include "Component.h"
 #include "Observer.h"
 #include <string>
-namespace dae
-{
+#include "TextComponent.h"
+
 	class TextComponent;
-	class DisplayScoreComponent : public Component, public Observer
-	{
+    class DisplayScoreComponent : public dae::Component, public dae::Observer
+    {
     public:
-        DisplayScoreComponent(GameObject* pOwner);
+        DisplayScoreComponent(dae::GameObject* pOwner);
         ~DisplayScoreComponent() override = default;
 
-        void OnNotify(GameObject* entity, Event event) override;
+        void OnNotify(dae::GameObject* entity, dae::Event event) override;
 
         void Update(float deltaTime) override;
         void Render() override;
         void FixedUpdate() override;
 
     private:
-        TextComponent* m_TextComponent;
+        dae::TextComponent* m_TextComponent;
         std::string m_ScoreText;
-    
-	};
-}
+
+    };
+
 

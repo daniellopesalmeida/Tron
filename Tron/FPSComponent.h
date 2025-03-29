@@ -1,15 +1,15 @@
 #pragma once
 #include "Component.h"
+#include "TextComponent.h"
 
-namespace dae
-{
+
 	class TextComponent;
 
-	class FPSComponent final : public Component
+	class FPSComponent final : public dae::Component
 	{
 	public:
 
-		FPSComponent(GameObject* pOwner);
+		FPSComponent(dae::GameObject* pOwner);
 		~FPSComponent() override = default;
 		FPSComponent(const FPSComponent& other) = delete;
 		FPSComponent(FPSComponent&& other) = delete;
@@ -26,6 +26,6 @@ namespace dae
 		float m_Fps{};
 		float m_ElapsedTime{};
 		float m_FrameCount{};
-		TextComponent* m_pTextComponent;
+		dae::TextComponent* m_pTextComponent;
 	};
-}
+
