@@ -8,26 +8,26 @@
 #include <map>
 #include <iostream>
 
-dae::ThrashTheCacheComponent::ThrashTheCacheComponent(GameObject* pOwner)
+ThrashTheCacheComponent::ThrashTheCacheComponent(dae::GameObject* pOwner)
     :Component{pOwner}
 {
 }
 
-void dae::ThrashTheCacheComponent::Render() 
+void ThrashTheCacheComponent::Render() 
 {
     Ex1();
     Ex2();
 }
 
-void dae::ThrashTheCacheComponent::Update(float )
+void ThrashTheCacheComponent::Update(float )
 {
 }
 
-void dae::ThrashTheCacheComponent::FixedUpdate()
+void ThrashTheCacheComponent::FixedUpdate()
 {
 }
 
-void dae::ThrashTheCacheComponent::Ex1()
+void ThrashTheCacheComponent::Ex1()
 {
     //std::cout << "Ex1() is being called!\n";
     bool windowActive{true};
@@ -76,7 +76,7 @@ void dae::ThrashTheCacheComponent::Ex1()
     ImGui::End();
 }
 
-void dae::ThrashTheCacheComponent::Ex2()
+void ThrashTheCacheComponent::Ex2()
 {
     bool windowActive{ true };
 
@@ -160,7 +160,7 @@ void dae::ThrashTheCacheComponent::Ex2()
     ImGui::End();
 }
 
-void dae::ThrashTheCacheComponent::Ex1Calc(int sampleSize)
+void ThrashTheCacheComponent::Ex1Calc(int sampleSize)
 {
     m_Ex1XData.clear();
     m_Ex1YData.clear();
@@ -212,7 +212,7 @@ void dae::ThrashTheCacheComponent::Ex1Calc(int sampleSize)
     delete[] arr;
 }
 
-void dae::ThrashTheCacheComponent::Ex2Calc(int sampleSize )
+void ThrashTheCacheComponent::Ex2Calc(int sampleSize )
 {
     m_Ex2XData.clear();
     m_Ex2YData.clear();
@@ -263,7 +263,7 @@ void dae::ThrashTheCacheComponent::Ex2Calc(int sampleSize )
     delete[] arr;
 }
 
-void dae::ThrashTheCacheComponent::Ex2AltCalc(int sampleSize )
+void ThrashTheCacheComponent::Ex2AltCalc(int sampleSize )
 {
     m_Ex2XAltData.clear();
     m_Ex2YAltData.clear();

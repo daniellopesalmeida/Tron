@@ -2,13 +2,12 @@
 #include "Component.h"
 #include <vector>
 
-namespace dae
-{
 
-	class ThrashTheCacheComponent final : public Component
+
+	class ThrashTheCacheComponent final : public dae::Component
 	{
 	public:
-		ThrashTheCacheComponent(GameObject* pOwner);
+		ThrashTheCacheComponent(dae::GameObject* pOwner);
 		~ThrashTheCacheComponent() override = default;
 		ThrashTheCacheComponent(const ThrashTheCacheComponent& other) = delete;
 		ThrashTheCacheComponent(ThrashTheCacheComponent&& other) = delete;
@@ -62,5 +61,5 @@ namespace dae
 		std::vector<float> m_Ex2XAltData{};
 		std::vector<float> m_Ex2YAltData{};
 	};
-}
+
 

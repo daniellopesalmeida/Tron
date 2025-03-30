@@ -21,12 +21,40 @@
 #include "DisplayHealthComponent.h"
 #include "DisplayScoreComponent.h"
 #include "GameCommands.h"
+#include <filesystem>
 
 
 
 
 void W01(dae::Scene& scene);
 void W05(dae::Scene& scene);
+
+namespace fs = std::filesystem;
+constexpr int MAX_TRAVERSAL = 5;
+
+std::string FindDataFolder()
+{
+	fs::path currentDir = fs::current_path();
+	fs::path dataPath = currentDir / "Data"; 
+
+	int counter = 0;
+
+	while (!fs::exists(dataPath) && counter < MAX_TRAVERSAL)
+	{
+		currentDir = currentDir.parent_path(); 
+		dataPath = currentDir / "Data"; 
+		counter++;
+	}
+
+	if (fs::exists(dataPath))
+	{
+		return dataPath.string();
+	}
+	else
+	{
+		throw std::runtime_error("Could not find 'Data' folder after traversing " + std::to_string(MAX_TRAVERSAL) + " levels.");
+	}
+}
 
 void load()
 {
@@ -36,8 +64,11 @@ void load()
 
 
 }
-int main(int, char* []) {
-	dae::Minigin engine("../Data/");
+int main(int, char* []) 
+{
+	std::string dataPath = FindDataFolder();
+	std::cout << "Found Data Path: " << dataPath << std::endl;
+	dae::Minigin engine(dataPath);
 	engine.Run(load);
 	return 0;
 }
@@ -133,22 +164,22 @@ void W05(dae::Scene& scene)
 	//keyboard input
 	//up
 	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_W, dae::KeyState::Down,
-		std::make_unique<GameCommands::Move>(blueTank.get(), glm::vec2{ 0, -1 }, tankSpeed));
+		std::make_unique<Move>(blueTank.get(), glm::vec2{ 0, -1 }, tankSpeed));
 	//down
 	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_S, dae::KeyState::Down,
-		std::make_unique<GameCommands::Move>(blueTank.get(), glm::vec2{ 0, 1 }, tankSpeed));
+		std::make_unique<Move>(blueTank.get(), glm::vec2{ 0, 1 }, tankSpeed));
 	//right
 	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_D, dae::KeyState::Down,
-		std::make_unique<GameCommands::Move>(blueTank.get(), glm::vec2{ 1, 0 }, tankSpeed));
+		std::make_unique<Move>(blueTank.get(), glm::vec2{ 1, 0 }, tankSpeed));
 	//left
 	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_A, dae::KeyState::Down,
-		std::make_unique<GameCommands::Move>(blueTank.get(), glm::vec2{ -1, 0 }, tankSpeed));
+		std::make_unique<Move>(blueTank.get(), glm::vec2{ -1, 0 }, tankSpeed));
 	//take damage
 	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_C, dae::KeyState::Released,
-		std::make_unique<GameCommands::TakeDamage>(blueTank.get()));
+		std::make_unique<TakeDamage>(blueTank.get()));
 	//increase score
 	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_Z, dae::KeyState::Released,
-		std::make_unique<GameCommands::IncreaseScore>(blueTank.get()));
+		std::make_unique<IncreaseScore>(blueTank.get()));
 
 	//red tank health display
 	auto redTankHealth = std::make_shared<dae::GameObject>();
@@ -179,30 +210,30 @@ void W05(dae::Scene& scene)
 	dae::InputManager::GetInstance().AddController(0);
 	//up
 	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::DPadUp, dae::KeyState::Down,
-		std::make_unique<GameCommands::Move>(redTank.get(), glm::vec2{ 0, -1 }, tankSpeed * 2));
+		std::make_unique<Move>(redTank.get(), glm::vec2{ 0, -1 }, tankSpeed * 2));
 	//down
 	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::DPadDown, dae::KeyState::Down,
-		std::make_unique<GameCommands::Move>(redTank.get(), glm::vec2{ 0, 1 }, tankSpeed * 2));
+		std::make_unique<Move>(redTank.get(), glm::vec2{ 0, 1 }, tankSpeed * 2));
 	//right
 	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::DPadRight, dae::KeyState::Down,
-		std::make_unique<GameCommands::Move>(redTank.get(), glm::vec2{ 1, 0 }, tankSpeed * 2));
+		std::make_unique<Move>(redTank.get(), glm::vec2{ 1, 0 }, tankSpeed * 2));
 	//left
 	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::DPadLeft, dae::KeyState::Down,
-		std::make_unique<GameCommands::Move>(redTank.get(), glm::vec2{ -1, 0 }, tankSpeed * 2));
+		std::make_unique<Move>(redTank.get(), glm::vec2{ -1, 0 }, tankSpeed * 2));
 	//take damage
 	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::X, dae::KeyState::Released,
-		std::make_unique<GameCommands::TakeDamage>(redTank.get()));
+		std::make_unique<TakeDamage>(redTank.get()));
 	//increase score
 	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::A, dae::KeyState::Released,
-		std::make_unique<GameCommands::IncreaseScore>(redTank.get()));
+		std::make_unique<IncreaseScore>(redTank.get()));
 
 
 
 	//resets stats and achievments (i know its not the best way to reset the achievments with the stats but its just for showcase)
 	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_R, dae::KeyState::Released,
-		std::make_unique<GameCommands::ResetAchievements>(blueTank.get()));
+		std::make_unique<ResetAchievements>(blueTank.get()));
 
 	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::Start, dae::KeyState::Released,
-		std::make_unique<GameCommands::ResetAchievements>(redTank.get()));
+		std::make_unique<ResetAchievements>(redTank.get()));
 
 }
