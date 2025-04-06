@@ -49,6 +49,19 @@ void dae::TransformComponent::SetParent(TransformComponent* gameObject)
 	m_parent = gameObject;
 }
 
+#include "GameObject.h"
+
+void dae::TransformComponent::SetPosDirty()
+{
+	m_IsPosDirty = true;
+	dae::GameObject* GOparent = this->GetOwner();
+	auto children = GOparent->GetChildren();
+	for (auto& child : children)
+	{
+		child->GetTransform()->SetPosDirty();
+	}
+}
+
 
 void dae::TransformComponent::Update(float)
 {

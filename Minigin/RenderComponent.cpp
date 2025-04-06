@@ -36,3 +36,8 @@ void dae::RenderComponent::SetTexture(std::shared_ptr<Texture2D> texture)
 {
 	m_Texture = texture;
 }
+
+glm::ivec2 dae::RenderComponent::GetSize() const
+{
+	return m_Texture->GetSize();
+}

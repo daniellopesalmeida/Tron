@@ -25,7 +25,7 @@ namespace dae
 		void UpdateWorldPosition();
 
 		void SetParent(TransformComponent* gameObject);
-		void SetPosDirty() { m_IsPosDirty = true; }
+		void SetPosDirty();
 
 		void Update(float deltaTime) override;
 		void Render() override;

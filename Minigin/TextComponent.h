@@ -28,7 +28,7 @@ namespace dae
         void SetText(const std::string& text);
         void SetColor(const SDL_Color color);
         const std::string& GetText() const { return m_Text; }
-       
+        glm::ivec2 GetSize() const;
 
     private:
         std::string m_Text;

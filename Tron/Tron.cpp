@@ -161,6 +161,13 @@ void W05(dae::Scene& scene)
 	blueTank->SetPosition(50, 350);
 	scene.Add(blueTank);
 
+	auto blueTankText = std::make_shared<dae::GameObject>();
+	blueTankText->AddComponent<dae::TextComponent>("P1", fontDescription)->SetColor(SDL_Color(100, 150, 255));
+	auto blueTankTextSize = blueTankText->GetComponent<dae::TextComponent>()->GetSize();
+	auto blueTankTextureSize = blueTank->GetComponent<dae::RenderComponent>()->GetSize();
+	blueTankText->SetPosition(float(blueTankTextureSize.x/2- blueTankTextSize.x/2), float(-blueTankTextSize.y));
+	blueTank->AddChild(blueTankText);
+
 	//keyboard input
 	//up
 	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_W, dae::KeyState::Down,
@@ -205,6 +212,13 @@ void W05(dae::Scene& scene)
 	redTankHealth->GetComponent<dae::TextComponent>()->SetText("Health: " + std::to_string(redTank->GetComponent<PlayerStatsComponent>()->GetHealth()));
 	redTank->SetPosition(100, 350);
 	scene.Add(redTank);
+
+	auto redTankText = std::make_shared<dae::GameObject>();
+	redTankText->AddComponent<dae::TextComponent>("P2", fontDescription)->SetColor(SDL_Color(255, 0, 0));
+	auto redTankTextSize = redTankText->GetComponent<dae::TextComponent>()->GetSize();
+	auto redTankTextureSize = redTank->GetComponent<dae::RenderComponent>()->GetSize();
+	redTankText->SetPosition(float(redTankTextureSize.x / 2 - redTankTextSize.x / 2), float(-redTankTextSize.y));
+	redTank->AddChild(redTankText);
 
 	//controller
 	dae::InputManager::GetInstance().AddController(0);

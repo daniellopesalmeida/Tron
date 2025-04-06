@@ -12,6 +12,23 @@ dae::TextComponent::TextComponent(GameObject* pOwner, const std::string& text, s
 	:Component(pOwner), m_NeedsUpdate(true), m_Text(text), m_Font(std::move(font)), m_TextTexture(nullptr)
 {
 	m_pRenderComponent = GetOwner()->GetComponent<dae::RenderComponent>();
+	const auto surf = TTF_RenderText_Blended(m_Font->GetFont(), m_Text.c_str(), m_Color);
+	if (surf == nullptr)
+	{
+		throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
+	}
+	auto texture = SDL_CreateTextureFromSurface(Renderer::GetInstance().GetSDLRenderer(), surf);
+	if (texture == nullptr)
+	{
+		throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
+	}
+	SDL_FreeSurface(surf);
+	m_TextTexture = std::make_shared<Texture2D>(texture);
+	m_NeedsUpdate = false;
+	if (m_pRenderComponent)
+	{
+		m_pRenderComponent->SetTexture(m_TextTexture);
+	}
 	//const auto surf = TTF_RenderText_Blended(m_Font->GetFont(), m_Text.c_str(), m_Color);
 	//if (surf == nullptr)
 	//{
@@ -82,6 +99,12 @@ void dae::TextComponent::SetColor(const SDL_Color color)
 	m_Color = color;
 	m_NeedsUpdate = true;
 
+}
+
+glm::ivec2 dae::TextComponent::GetSize() const
+{
+	
+	return m_TextTexture->GetSize();
 }
 
 
