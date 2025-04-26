@@ -64,14 +64,13 @@ void load()
 {
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Current Assignment: Week06");
 
-	
-
 #if _DEBUG
 	dae::ServiceLocator::RegisterSoundSystem(
 		std::make_unique<dae::LoggingSoundSystem>(std::make_unique<dae::SDLSoundSystem>()));
 #else
 	dae::ServiceLocator::RegisterSoundSystem(std::make_unique<dae::SDLSoundSystem>());
 #endif
+
 	W06(scene);
 
 }
@@ -261,10 +260,16 @@ void W06(dae::Scene& scene)
 	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::Start, dae::KeyState::Released,
 		std::make_unique<ResetAchievements>(redTank.get()));
 
-	// play music
+	// sounds
 	auto& ss = dae::ServiceLocator::GetSoundSystem();
-	ss.LoadSound(1, "../Data/MainMenuMusic.mp3", dae::SoundType::Music);
+	ss.LoadSound(1, "../Data/GameMusic.mp3", dae::SoundType::Music);
 	ss.LoadSound(2, "../Data/Shoot.mp3", dae::SoundType::SoundEffect);
-	ss.Play(1, 0.5f, dae::SoundType::Music);
+	ss.LoadSound(3, "../Data/Blip1.mp3", dae::SoundType::SoundEffect);
+	ss.Play(1, 0.3f, dae::SoundType::Music);
+
+	// spacebar to pause
+
+	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_SPACE, dae::KeyState::Released,
+		std::make_unique<PauseSounds>());
 
 }

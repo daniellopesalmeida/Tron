@@ -1,6 +1,7 @@
 #include "PlayerStatsComponent.h"
 //#include "Subject.h"
 #include "Observer.h"
+#include "ServiceLocator.h"
 
 
 PlayerStatsComponent::PlayerStatsComponent(dae::GameObject* pOwner, int maxHealth, int initialScore)
@@ -16,6 +17,8 @@ void PlayerStatsComponent::AddScore(int amount)
     {
         m_Score += amount;
         m_PlayerStatsSubject->Notify(GetOwner(), dae::Event::COLLECT_POINTS);
+        auto& soundSystem = dae::ServiceLocator::GetSoundSystem();
+        soundSystem.Play(3, 0.5f, dae::SoundType::SoundEffect);
     }
 }
 
@@ -29,6 +32,8 @@ void PlayerStatsComponent::TakeDamage(int amount)
     else
     {
         m_PlayerStatsSubject->Notify(GetOwner(), dae::Event::PLAYER_HIT);
+        auto& soundSystem = dae::ServiceLocator::GetSoundSystem();
+        soundSystem.Play(2, 0.5f, dae::SoundType::SoundEffect);
     }
 }
 

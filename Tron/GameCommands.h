@@ -5,6 +5,7 @@
 
 
 
+
 class Move final : public dae::GameObjectCommand
 {
 
@@ -89,8 +90,7 @@ public:
 	{
 
 		GetGameObject()->GetComponent<PlayerStatsComponent>()->AddScore(20);
-		auto& soundSystem = dae::ServiceLocator::GetSoundSystem();
-		soundSystem.Play(2, 0.5f, dae::SoundType::SoundEffect);
+		
 	}
 
 private:
@@ -110,3 +110,26 @@ public:
 	}
 };
 
+class PauseSounds final : public dae::Command
+{
+public:
+	PauseSounds() = default;
+	void Execute(float) override 
+	{
+		
+		auto& ss = dae::ServiceLocator::GetSoundSystem();
+		if (m_Paused)
+		{
+			ss.UnpauseSound();
+			m_Paused = !m_Paused;
+		}
+		else
+		{
+			ss.PauseSound();
+			m_Paused = !m_Paused;
+		}
+	}
+
+private:
+	bool m_Paused = false;
+};

@@ -3,6 +3,7 @@
 
 dae::SDLSoundSystem::SDLSoundSystem() : m_Running(true), m_SoundWorker(&SDLSoundSystem::SoundThread, this)
 {
+	Mix_Init(MIX_INIT_MP3);
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
 		std::cerr << "Mix_OpenAudio failed: " << Mix_GetError() << '\n';
