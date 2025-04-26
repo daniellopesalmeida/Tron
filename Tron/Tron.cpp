@@ -261,10 +261,15 @@ void W06(dae::Scene& scene)
 		std::make_unique<ResetAchievements>(redTank.get()));
 
 	// sounds
+	auto soundBindsText= std::make_shared<dae::GameObject>();
+	soundBindsText->AddComponent<dae::TextComponent>("SpaceBar to pause music (sound effects on score increase and dmg taken)", fontDescription)->SetColor(SDL_Color(255, 255, 255));;
+	soundBindsText->SetPosition(100, 100);
+	scene.Add(soundBindsText);
+
 	auto& ss = dae::ServiceLocator::GetSoundSystem();
 	ss.LoadSound(1, "../Data/GameMusic.mp3", dae::SoundType::Music);
 	ss.LoadSound(2, "../Data/Shoot.mp3", dae::SoundType::SoundEffect);
-	ss.LoadSound(3, "../Data/Blip1.mp3", dae::SoundType::SoundEffect);
+	ss.LoadSound(3, "../Data/Blip2.mp3", dae::SoundType::SoundEffect);
 	ss.Play(1, 0.3f, dae::SoundType::Music);
 
 	// spacebar to pause
