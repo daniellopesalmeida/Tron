@@ -1,6 +1,7 @@
 #pragma once
 #include "Command.h"
 #include "PlayerStatsComponent.h"
+#include "ServiceLocator.h"
 
 
 
@@ -88,6 +89,8 @@ public:
 	{
 
 		GetGameObject()->GetComponent<PlayerStatsComponent>()->AddScore(20);
+		auto& soundSystem = dae::ServiceLocator::GetSoundSystem();
+		soundSystem.Play(2, 0.5f, dae::SoundType::SoundEffect);
 	}
 
 private:

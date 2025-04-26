@@ -9,8 +9,8 @@ namespace dae
 	{
 		static std::unique_ptr<SoundSystem> _ss_instance;
 	public:
-		static SoundSystem& get_sound_system() { return *_ss_instance; }
-		static void register_sound_system(std::unique_ptr<SoundSystem>&& ss) 
+		static SoundSystem& GetSoundSystem() { return *_ss_instance; }
+		static void RegisterSoundSystem(std::unique_ptr<SoundSystem>&& ss) 
 		{
 			_ss_instance = ss == nullptr ? std::make_unique<NullSoundSystem>() : std::move(ss);
 		};
