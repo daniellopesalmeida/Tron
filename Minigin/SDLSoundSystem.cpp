@@ -8,7 +8,7 @@ namespace dae
     {
     public:
         SDLSoundSystemImpl()
-            : m_Running(true), m_SoundWorker(&SDLSoundSystemImpl::SoundThread, this)
+            : m_Running{ true }, m_SoundWorker{ &SDLSoundSystemImpl::SoundThread, this }
         {
             Mix_Init(MIX_INIT_MP3);
             if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
@@ -24,9 +24,8 @@ namespace dae
         ~SDLSoundSystemImpl()
         {
             m_Running = false;
-            m_Condition.notify_all();
-            if (m_SoundWorker.joinable())
-                m_SoundWorker.join();
+            m_Condition.notify_one();
+           
 
             for (auto& [id, chunk] : m_SoundEffects)
                 Mix_FreeChunk(chunk);
@@ -132,7 +131,7 @@ namespace dae
         std::mutex m_QueueMutex;
         std::condition_variable m_Condition;
         std::atomic<bool> m_Running;
-        std::thread m_SoundWorker;
+        std::jthread m_SoundWorker;
     };
 
 
