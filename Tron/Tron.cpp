@@ -26,6 +26,7 @@
 #include <SoundSystem.h>
 #include <SDLSoundSystem.h>
 #include <LoggingSoundSystem.h>
+#include "PlayerCharacter.h"
 
 
 
@@ -279,5 +280,8 @@ void W06(dae::Scene& scene)
 
 	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_SPACE, dae::KeyState::Released,
 		std::make_unique<PauseSounds>());
+
+	auto player = std::make_unique<dae::PlayerCharacter>(100,100);
+	scene.Add(player->GetPlayer());
 
 }
