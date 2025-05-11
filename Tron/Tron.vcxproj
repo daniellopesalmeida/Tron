@@ -533,6 +533,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClCompile Include="FPSComponent.cpp" />
     <ClCompile Include="GameCommands.cpp" />
     <ClCompile Include="PlayerCharacter.cpp" />
+    <ClCompile Include="PlayerState.cpp" />
     <ClCompile Include="PlayerStatsComponent.cpp" />
     <ClCompile Include="ThrashTheCacheComponent.cpp" />
     <ClCompile Include="Tron.cpp" />
@@ -543,6 +544,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClInclude Include="FPSComponent.h" />
     <ClInclude Include="GameCommands.h" />
     <ClInclude Include="PlayerCharacter.h" />
+    <ClInclude Include="PlayerState.h" />
     <ClInclude Include="PlayerStatsComponent.h" />
     <ClInclude Include="ThrashTheCacheComponent.h" />
   </ItemGroup>

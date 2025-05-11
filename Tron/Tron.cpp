@@ -33,6 +33,7 @@
 
 void W01(dae::Scene& scene);
 void W06(dae::Scene& scene);
+void TestScene(dae::Scene& scene);
 
 namespace fs = std::filesystem;
 constexpr int MAX_TRAVERSAL = 5;
@@ -63,7 +64,8 @@ std::string FindDataFolder()
 
 void load()
 {
-	auto& scene = dae::SceneManager::GetInstance().CreateScene("Current Assignment: Week06");
+	//auto& scene = dae::SceneManager::GetInstance().CreateScene("Current Assignment: Week06");
+	auto& testScene = dae::SceneManager::GetInstance().CreateScene("Test Scene");
 
 #if _DEBUG
 	dae::ServiceLocator::RegisterSoundSystem(
@@ -72,7 +74,8 @@ void load()
 	dae::ServiceLocator::RegisterSoundSystem(std::make_unique<dae::SDLSoundSystem>());
 #endif
 
-	W06(scene);
+	//W06(scene);
+	TestScene(testScene);
 
 }
 int main(int, char* []) 
@@ -281,7 +284,42 @@ void W06(dae::Scene& scene)
 	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_SPACE, dae::KeyState::Released,
 		std::make_unique<PauseSounds>());
 
-	auto player = std::make_unique<dae::PlayerCharacter>(100,100);
-	scene.Add(player->GetPlayer());
+	
 
+}
+
+void TestScene(dae::Scene& scene)
+{
+	float tankSpeed = 100.f;
+	auto player1 = std::make_unique<dae::PlayerCharacter>(scene,100, 100,1);
+	auto player2 = std::make_unique<dae::PlayerCharacter>(scene, 200, 200, 2);
+
+	//keyboard input
+	//up
+	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_W, dae::KeyState::Down,
+		std::make_unique<Move>(player1->GetPlayer().get(), glm::vec2{ 0, -1 }, tankSpeed));
+	//down
+	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_S, dae::KeyState::Down,
+		std::make_unique<Move>(player1->GetPlayer().get(), glm::vec2{ 0, 1 }, tankSpeed));
+	//right
+	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_D, dae::KeyState::Down,
+		std::make_unique<Move>(player1->GetPlayer().get(), glm::vec2{1, 0}, tankSpeed));
+	//left
+	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_A, dae::KeyState::Down,
+		std::make_unique<Move>(player1->GetPlayer().get(), glm::vec2{ -1, 0 }, tankSpeed));
+
+	//controller
+	dae::InputManager::GetInstance().AddController(0);
+	//up
+	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::DPadUp, dae::KeyState::Down,
+		std::make_unique<Move>(player2->GetPlayer().get(), glm::vec2{ 0, -1 }, tankSpeed));
+	//down
+	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::DPadDown, dae::KeyState::Down,
+		std::make_unique<Move>(player2->GetPlayer().get(), glm::vec2{ 0, 1 }, tankSpeed ));
+	//right
+	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::DPadRight, dae::KeyState::Down,
+		std::make_unique<Move>(player2->GetPlayer().get(), glm::vec2{ 1, 0 }, tankSpeed ));
+	//left
+	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::DPadLeft, dae::KeyState::Down,
+		std::make_unique<Move>(player2->GetPlayer().get(), glm::vec2{ -1, 0 }, tankSpeed ));
 }

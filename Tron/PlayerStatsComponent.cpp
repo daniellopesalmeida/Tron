@@ -44,6 +44,11 @@ void PlayerStatsComponent::ResetStats()
     m_PlayerStatsSubject->Notify(GetOwner(), dae::Event::RESET_ACHIEVEMENTS);
 }
 
+std::string PlayerStatsComponent::GetHealthString() const
+{
+    return std::string(m_Health, '#');
+}
+
 void PlayerStatsComponent::AddObserver(dae::Observer* observer)
 {
 	m_PlayerStatsSubject->AddObserver(observer);

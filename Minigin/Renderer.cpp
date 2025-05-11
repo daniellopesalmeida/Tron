@@ -68,23 +68,46 @@ void dae::Renderer::Destroy()
 
 }
 
-void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y) const
+
+void dae::Renderer::RenderTexture(const Texture2D& texture, float x, float y, float rotationAngle) const
 {
-	SDL_Rect dst{};
-	dst.x = static_cast<int>(x);
-	dst.y = static_cast<int>(y);
-	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
-	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
+	SDL_Rect dstRect{};
+	dstRect.x = static_cast<int>(x);
+	dstRect.y = static_cast<int>(y);
+
+	// Get the size of the texture
+	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dstRect.w, &dstRect.h);
+
+	// Use SDL_RenderCopyEx to apply rotation
+	SDL_RenderCopyEx(
+		m_renderer,
+		texture.GetSDLTexture(),
+		nullptr,   // No source rect (full texture)
+		&dstRect,  // Destination rectangle
+		rotationAngle,  // Rotation angle
+		nullptr,  // Rotation around the center of the texture
+		SDL_FLIP_NONE // No flip
+	);
 }
 
-void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float width, const float height) const
+void dae::Renderer::RenderTexture(const Texture2D& texture, float x, float y, float width, float height, float rotationAngle) const
 {
-	SDL_Rect dst{};
-	dst.x = static_cast<int>(x);
-	dst.y = static_cast<int>(y);
-	dst.w = static_cast<int>(width);
-	dst.h = static_cast<int>(height);
-	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
+	SDL_Rect dstRect{};
+	dstRect.x = static_cast<int>(x);
+	dstRect.y = static_cast<int>(y);
+	dstRect.w = static_cast<int>(width);
+	dstRect.h = static_cast<int>(height);
+
+	// Use SDL_RenderCopyEx to apply rotation with custom width/height
+	SDL_RenderCopyEx(
+		m_renderer,
+		texture.GetSDLTexture(),
+		nullptr,   // No source rect (full texture)
+		&dstRect,  // Destination rectangle
+		rotationAngle,  // Rotation angle
+		nullptr,  // Rotation around the center of the texture
+		SDL_FLIP_NONE // No flip
+	);
 }
 
 SDL_Renderer* dae::Renderer::GetSDLRenderer() const { return m_renderer; }

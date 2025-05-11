@@ -2,6 +2,7 @@
 #include "Component.h"
 #include "Subject.h"
 #include <memory>
+#include <string>
 
 
     class Subject;
@@ -10,7 +11,7 @@
 	class PlayerStatsComponent : public dae::Component
 	{
     public:
-        PlayerStatsComponent(dae::GameObject* pOwner, int maxHealth=3, int initialScore=0);
+        PlayerStatsComponent(dae::GameObject* pOwner, int maxHealth, int initialScore=0);
         ~PlayerStatsComponent() = default;
 
         void AddScore(int amount);
@@ -19,6 +20,7 @@
 
         int GetScore() const { return m_Score; }
         int GetHealth() const { return m_Health; }
+        std::string GetHealthString() const;
 
         void AddObserver(dae::Observer* observer);
         void RemoveObserver(dae::Observer* observer);

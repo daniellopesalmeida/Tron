@@ -43,14 +43,47 @@ void dae::InputManager::UpdateKeyboardInput(float deltaTime)
 {
     m_Keyboard->Update();
 
+    // Prioritized directional keys
+    std::vector<std::pair<SDL_Scancode, KeyState>> priorityKeys = {
+        {SDL_SCANCODE_W, KeyState::Down},
+        {SDL_SCANCODE_S, KeyState::Down},
+        {SDL_SCANCODE_A, KeyState::Down},
+        {SDL_SCANCODE_D, KeyState::Down}
+    };
+
+    // Check prioritized keys first
+    for (const auto& keyPair : priorityKeys)
+    {
+        auto it = m_KeyboardCommands.find(keyPair);
+        if (it != m_KeyboardCommands.end())
+        {
+            const auto& [key, state] = keyPair;
+            if ((state == KeyState::Pressed && m_Keyboard->IsDownThisFrame(key)) ||
+                (state == KeyState::Released && m_Keyboard->IsUpThisFrame(key)) ||
+                (state == KeyState::Down && m_Keyboard->IsPressed(key)))
+            {
+                it->second->Execute(deltaTime);
+                return; // Only process one movement input per frame
+            }
+        }
+    }
+
+    // Process non-directional keys (like space, enter, etc.)
     for (auto& [key, command] : m_KeyboardCommands)
     {
+        // Skip directional keys since we already handled them
+        if (key == std::make_pair(SDL_SCANCODE_W, KeyState::Down) ||
+            key == std::make_pair(SDL_SCANCODE_S, KeyState::Down) ||
+            key == std::make_pair(SDL_SCANCODE_A, KeyState::Down) ||
+            key == std::make_pair(SDL_SCANCODE_D, KeyState::Down))
+            continue;
+
         SDL_Scancode scancode = key.first;
 
         switch (key.second)
         {
         case KeyState::Pressed:
-            if (m_Keyboard->IsDownThisFrame(scancode)) 
+            if (m_Keyboard->IsDownThisFrame(scancode))
                 command->Execute(deltaTime);
             break;
 
@@ -136,6 +169,32 @@ void dae::InputManager::UpdateControllerInput(float deltaTime)
         controller->Update();
         int controllerIdx = controller->GetIndex();
 
+        // Directional input priority: Up > Down > Left > Right
+        std::vector<std::tuple<int, Controller::GamepadButton, KeyState>> priorityButtons = {
+            {controllerIdx, Controller::GamepadButton::DPadUp, KeyState::Down},
+            {controllerIdx, Controller::GamepadButton::DPadDown, KeyState::Down},
+            {controllerIdx, Controller::GamepadButton::DPadLeft, KeyState::Down},
+            {controllerIdx, Controller::GamepadButton::DPadRight, KeyState::Down}
+        };
+
+        // Process only the first valid directional input
+        for (const auto& keyTuple : priorityButtons)
+        {
+            auto it = m_ControllerCommands.find(keyTuple);
+            if (it != m_ControllerCommands.end())
+            {
+                const auto& [idx, button, state] = keyTuple;
+                if ((state == KeyState::Pressed && controller->IsDownThisFrame(button)) ||
+                    (state == KeyState::Released && controller->IsUpThisFrame(button)) ||
+                    (state == KeyState::Down && controller->IsPressed(button)))
+                {
+                    it->second->Execute(deltaTime);
+                    return; // Stop after processing the first valid direction
+                }
+            }
+        }
+
+        // Process other (non-directional) controller inputs
         for (auto& [key, command] : m_ControllerCommands)
         {
             int assignedControllerIdx;
@@ -143,7 +202,14 @@ void dae::InputManager::UpdateControllerInput(float deltaTime)
             KeyState state;
             std::tie(assignedControllerIdx, button, state) = key;
 
-            if (controllerIdx == assignedControllerIdx) 
+            // Skip directional keys (handled above)
+            if (button == Controller::GamepadButton::DPadUp ||
+                button == Controller::GamepadButton::DPadDown ||
+                button == Controller::GamepadButton::DPadLeft ||
+                button == Controller::GamepadButton::DPadRight)
+                continue;
+
+            if (controllerIdx == assignedControllerIdx)
             {
                 switch (state)
                 {
@@ -162,6 +228,5 @@ void dae::InputManager::UpdateControllerInput(float deltaTime)
                 }
             }
         }
-        
     }
 }

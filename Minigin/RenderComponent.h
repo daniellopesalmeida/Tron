@@ -31,11 +31,12 @@ namespace dae
 
 		glm::ivec2 GetSize() const;
 		void SetSize(const glm::ivec2& size) { m_CustomSize = size; }
-
+		void SetRotation(float angle);
 
 	private:
 		
 		std::shared_ptr<Texture2D> m_Texture{};
 		glm::ivec2 m_CustomSize{ -1, -1 };
+		float m_RotationAngle{ 0.0f };
 	};
 }

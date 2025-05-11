@@ -70,6 +70,11 @@ void dae::GameObject::SetPosition(float x, float y)
 	m_Transform->SetPosition(x, y, 0.0f);
 }
 
+void dae::GameObject::SetPosition(glm::vec3 position)
+{
+	m_Transform->SetPosition(position);
+}
+
 void dae::GameObject::SetParent(std::shared_ptr<GameObject> parent, bool keepWorldPos)
 {
 	//Check if the new parent is valid (not itself or one of its children)

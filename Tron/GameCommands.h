@@ -2,8 +2,9 @@
 #include "Command.h"
 #include "PlayerStatsComponent.h"
 #include "ServiceLocator.h"
-
-
+#include <StateComponent.h>
+#include "PlayerState.h"
+#include <memory>
 
 
 class Move final : public dae::GameObjectCommand
@@ -11,14 +12,14 @@ class Move final : public dae::GameObjectCommand
 
 public:
 	Move(dae::GameObject* pGameObject, glm::vec2 direction, float speed = 1.f)
-		: GameObjectCommand(pGameObject), m_Direction{ direction }, m_Speed{ speed } {
-	};
+		: GameObjectCommand(pGameObject), m_Direction{ direction }, m_Speed{ speed } 
+	{};
 
 	~Move() = default;
 
 	void Execute(float deltaTime) override
 	{
-		std::cout << "Command Move executed!" << std::endl;
+		//std::cout << "Command Move executed!" << std::endl;
 
 		auto pos = GetGameObject()->GetTransform()->GetLocalPosition();
 		pos.x += m_Direction.x * m_Speed * deltaTime;
@@ -26,6 +27,37 @@ public:
 		GetGameObject()->SetPosition(pos.x, pos.y);
 
 		//std::cout << "Moved GameObject to (" << pos.x << ", " << pos.y << ")" << std::endl;
+		// Get the StateComponent attached to the GameObject
+		auto stateComponent = GetGameObject()->GetComponent<dae::StateComponent>();
+		if (stateComponent)
+		{
+			// Determine the state to switch to based on direction
+			if (m_Direction.y < 0)
+			{
+				// Moving up
+				stateComponent->SetState(std::make_unique<UpState>());
+
+			}
+			else if (m_Direction.y > 0)
+			{
+				// Moving down
+				stateComponent->SetState(std::make_unique<DownState>());
+
+			}
+			else if (m_Direction.x > 0)
+			{
+				// Moving right
+				stateComponent->SetState(std::make_unique<RightState>());
+
+			}
+			else if (m_Direction.x < 0)
+			{
+				// Moving left
+				stateComponent->SetState(std::make_unique<LeftState>());
+
+			}
+		}
+	
 	}
 
 private:
