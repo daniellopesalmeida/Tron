@@ -22,12 +22,20 @@ namespace dae
 		void Render() override;
 
 		void SetTexture(const std::string& filename);
+		void SetTexture(const std::string& filename,  glm::ivec2& customSize);
+		void SetTexture(const std::string& filename, int size);
 		void SetTexture(std::shared_ptr<Texture2D> texture);
+		void SetTexture(std::shared_ptr<Texture2D> texture,  glm::ivec2& customSize);
+		void SetTexture(std::shared_ptr<Texture2D> texture, int size);
+		
+
 		glm::ivec2 GetSize() const;
+		void SetSize(const glm::ivec2& size) { m_CustomSize = size; }
 
 
 	private:
 		
 		std::shared_ptr<Texture2D> m_Texture{};
+		glm::ivec2 m_CustomSize{ -1, -1 };
 	};
 }

@@ -17,7 +17,14 @@ void dae::RenderComponent::Render()
 	if (transform != nullptr)
 	{
 		const auto& position = transform->GetWorldPosition();
-		Renderer::GetInstance().RenderTexture(*m_Texture, position.x, position.y);
+		if (m_CustomSize.x > 0 && m_CustomSize.y > 0)
+		{
+			Renderer::GetInstance().RenderTexture(*m_Texture, position.x, position.y, static_cast<float>(m_CustomSize.x), static_cast<float>(m_CustomSize.y));
+		}
+		else
+		{
+			Renderer::GetInstance().RenderTexture(*m_Texture, position.x, position.y);
+		}
 		
 	}
 	else
@@ -37,7 +44,38 @@ void dae::RenderComponent::SetTexture(std::shared_ptr<Texture2D> texture)
 	m_Texture = texture;
 }
 
+void dae::RenderComponent::SetTexture(const std::string& filename,  glm::ivec2& customSize)
+{
+	m_Texture = ResourceManager::GetInstance().LoadTexture(filename);
+	m_CustomSize = customSize;
+
+}
+
+void dae::RenderComponent::SetTexture(const std::string& filename,  int size)
+{
+	m_Texture = ResourceManager::GetInstance().LoadTexture(filename);
+	m_CustomSize.x = size;
+	m_CustomSize.y = size;
+
+}
+
+void dae::RenderComponent::SetTexture(std::shared_ptr<Texture2D> texture,  glm::ivec2& customSize)
+{
+	m_Texture = texture;
+	m_CustomSize = customSize;
+}
+
+void dae::RenderComponent::SetTexture(std::shared_ptr<Texture2D> texture,  int size)
+{
+	m_Texture = texture;
+	m_CustomSize.x = size;
+	m_CustomSize.y = size;
+}
+
 glm::ivec2 dae::RenderComponent::GetSize() const
 {
+	if(m_CustomSize.x > 0 && m_CustomSize.y > 0)
+		return m_CustomSize;
+
 	return m_Texture->GetSize();
 }

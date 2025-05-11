@@ -10,7 +10,7 @@
 	class PlayerStatsComponent : public dae::Component
 	{
     public:
-        PlayerStatsComponent(dae::GameObject* pOwner, int maxHealth, int initialScore=0);
+        PlayerStatsComponent(dae::GameObject* pOwner, int maxHealth=3, int initialScore=0);
         ~PlayerStatsComponent() = default;
 
         void AddScore(int amount);

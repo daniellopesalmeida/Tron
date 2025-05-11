@@ -131,6 +131,8 @@ void W06(dae::Scene& scene)
 	fps->SetPosition(5, 10);
 	scene.Add(fps);
 
+	auto tronFont = dae::ResourceManager::GetInstance().LoadFont("tronFont/tron.ttf", 15);
+
 	//blue tank description
 	auto fontDescription = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 15);
 	auto textBlueTank = std::make_shared<dae::GameObject>();
@@ -149,14 +151,14 @@ void W06(dae::Scene& scene)
 
 	//blue tank health display
 	auto blueTankhealth = std::make_shared<dae::GameObject>();
-	blueTankhealth->AddComponent<dae::TextComponent>("0", fontDescription)->SetColor(SDL_Color(100, 150, 255));
+	blueTankhealth->AddComponent<dae::TextComponent>("# ", tronFont)->SetColor(SDL_Color(100, 150, 255));
 	blueTankhealth->AddComponent<DisplayHealthComponent>();
 	blueTankhealth->SetPosition(5, 100);
 	scene.Add(blueTankhealth);
 
 	//blue tank score display
 	auto blueTankScore = std::make_shared<dae::GameObject>();
-	blueTankScore->AddComponent<dae::TextComponent>("Score: 0", fontDescription)->SetColor(SDL_Color(100, 150, 255));
+	blueTankScore->AddComponent<dae::TextComponent>("Score 0", tronFont)->SetColor(SDL_Color(100, 150, 255));
 	blueTankScore->AddComponent<DisplayScoreComponent>();
 	blueTankScore->SetPosition(5, 120);
 	scene.Add(blueTankScore);
@@ -167,15 +169,15 @@ void W06(dae::Scene& scene)
 	blueTank->AddComponent<dae::RenderComponent>()->SetTexture("blueTank.png");
 	blueTank->AddComponent<PlayerStatsComponent>(5)->AddObserver(blueTankhealth->GetComponent<DisplayHealthComponent>()); //add observers
 	blueTank->GetComponent<PlayerStatsComponent>()->AddObserver(blueTankScore->GetComponent<DisplayScoreComponent>());
-	blueTankhealth->GetComponent<dae::TextComponent>()->SetText("Health: " + std::to_string(blueTank->GetComponent<PlayerStatsComponent>()->GetHealth()));
+	blueTankhealth->GetComponent<dae::TextComponent>()->SetText("# " + std::to_string(blueTank->GetComponent<PlayerStatsComponent>()->GetHealth()));
 	blueTank->SetPosition(50, 350);
 	scene.Add(blueTank);
 
 	auto blueTankText = std::make_shared<dae::GameObject>();
-	blueTankText->AddComponent<dae::TextComponent>("P1", fontDescription)->SetColor(SDL_Color(100, 150, 255));
+	blueTankText->AddComponent<dae::TextComponent>("P1", tronFont)->SetColor(SDL_Color(100, 150, 255));
 	auto blueTankTextSize = blueTankText->GetComponent<dae::TextComponent>()->GetSize();
 	auto blueTankTextureSize = blueTank->GetComponent<dae::RenderComponent>()->GetSize();
-	blueTankText->SetPosition(float(blueTankTextureSize.x/2- blueTankTextSize.x/2), float(-blueTankTextSize.y));
+	blueTankText->SetPosition(float(blueTankTextureSize.x/2- blueTankTextSize.x/2), float(-blueTankTextSize.y-5));
 	blueTank->AddChild(blueTankText);
 
 	//keyboard input
@@ -200,14 +202,14 @@ void W06(dae::Scene& scene)
 
 	//red tank health display
 	auto redTankHealth = std::make_shared<dae::GameObject>();
-	redTankHealth->AddComponent<dae::TextComponent>("0", fontDescription)->SetColor(SDL_Color(255, 0, 0));
+	redTankHealth->AddComponent<dae::TextComponent>("# ", tronFont)->SetColor(SDL_Color(255, 0, 0));
 	redTankHealth->AddComponent<DisplayHealthComponent>();
 	redTankHealth->SetPosition(5, 140);
 	scene.Add(redTankHealth);
 
 	//red tank score display
 	auto redTankScore = std::make_shared<dae::GameObject>();
-	redTankScore->AddComponent<dae::TextComponent>("Score: 0", fontDescription)->SetColor(SDL_Color(255, 0, 0));
+	redTankScore->AddComponent<dae::TextComponent>("Score 0", tronFont)->SetColor(SDL_Color(255, 0, 0));
 	redTankScore->AddComponent<DisplayScoreComponent>();
 	redTankScore->SetPosition(5, 160);
 	scene.Add(redTankScore);
@@ -216,18 +218,19 @@ void W06(dae::Scene& scene)
 
 	//red tank object
 	auto redTank = std::make_shared<dae::GameObject>();
-	redTank->AddComponent<dae::RenderComponent>()->SetTexture("redTank.png");
+	redTank->AddComponent<dae::RenderComponent>()->SetTexture("redTank.png",50);
 	redTank->AddComponent<PlayerStatsComponent>(5)->AddObserver(redTankHealth->GetComponent<DisplayHealthComponent>()); //add observers
 	redTank->GetComponent<PlayerStatsComponent>()->AddObserver(redTankScore->GetComponent<DisplayScoreComponent>());
-	redTankHealth->GetComponent<dae::TextComponent>()->SetText("Health: " + std::to_string(redTank->GetComponent<PlayerStatsComponent>()->GetHealth()));
+	redTankHealth->GetComponent<dae::TextComponent>()->SetText("# " + std::to_string(redTank->GetComponent<PlayerStatsComponent>()->GetHealth()));
 	redTank->SetPosition(100, 350);
 	scene.Add(redTank);
 
+	
 	auto redTankText = std::make_shared<dae::GameObject>();
-	redTankText->AddComponent<dae::TextComponent>("P2", fontDescription)->SetColor(SDL_Color(255, 0, 0));
+	redTankText->AddComponent<dae::TextComponent>("P2", tronFont)->SetColor(SDL_Color(255, 0, 0));
 	auto redTankTextSize = redTankText->GetComponent<dae::TextComponent>()->GetSize();
 	auto redTankTextureSize = redTank->GetComponent<dae::RenderComponent>()->GetSize();
-	redTankText->SetPosition(float(redTankTextureSize.x / 2 - redTankTextSize.x / 2), float(-redTankTextSize.y));
+	redTankText->SetPosition(float(redTankTextureSize.x / 2 - redTankTextSize.x / 2), float(-redTankTextSize.y-5));
 	redTank->AddChild(redTankText);
 
 	//controller
