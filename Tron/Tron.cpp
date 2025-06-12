@@ -290,15 +290,23 @@ void TestScene(dae::Scene& scene)
 	//up
 	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_W, dae::KeyState::Down,
 		std::make_unique<Move>(player1->GetPlayer().get(), glm::vec2{ 0, -1 }, tankSpeed));
+	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_W, dae::KeyState::Released,
+		std::make_unique<StopMove>(player1->GetPlayer().get()));
 	//down
 	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_S, dae::KeyState::Down,
 		std::make_unique<Move>(player1->GetPlayer().get(), glm::vec2{ 0, 1 }, tankSpeed));
+	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_S, dae::KeyState::Released,
+		std::make_unique<StopMove>(player1->GetPlayer().get()));
 	//right
 	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_D, dae::KeyState::Down,
 		std::make_unique<Move>(player1->GetPlayer().get(), glm::vec2{1, 0}, tankSpeed));
+	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_D, dae::KeyState::Released,
+		std::make_unique<StopMove>(player1->GetPlayer().get()));
 	//left
 	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_A, dae::KeyState::Down,
 		std::make_unique<Move>(player1->GetPlayer().get(), glm::vec2{ -1, 0 }, tankSpeed));
+	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_A, dae::KeyState::Released,
+		std::make_unique<StopMove>(player1->GetPlayer().get()));
 	// shoot
 	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_SPACE, dae::KeyState::Pressed,
 		std::make_unique<Shoot>(player1->GetWeapon().get()));
@@ -308,15 +316,23 @@ void TestScene(dae::Scene& scene)
 	//up
 	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::DPadUp, dae::KeyState::Down,
 		std::make_unique<Move>(player2->GetPlayer().get(), glm::vec2{ 0, -1 }, tankSpeed));
+	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::DPadUp, dae::KeyState::Released,
+		std::make_unique<StopMove>(player2->GetPlayer().get()));
 	//down
 	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::DPadDown, dae::KeyState::Down,
 		std::make_unique<Move>(player2->GetPlayer().get(), glm::vec2{ 0, 1 }, tankSpeed ));
+	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::DPadDown, dae::KeyState::Released,
+		std::make_unique<StopMove>(player2->GetPlayer().get()));
 	//right
 	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::DPadRight, dae::KeyState::Down,
 		std::make_unique<Move>(player2->GetPlayer().get(), glm::vec2{ 1, 0 }, tankSpeed ));
+	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::DPadRight, dae::KeyState::Released,
+		std::make_unique<StopMove>(player2->GetPlayer().get()));
 	//left
 	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::DPadLeft, dae::KeyState::Down,
 		std::make_unique<Move>(player2->GetPlayer().get(), glm::vec2{ -1, 0 }, tankSpeed ));
+	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::DPadLeft, dae::KeyState::Released,
+		std::make_unique<StopMove>(player2->GetPlayer().get()));
 	// shoot
 	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::A, dae::KeyState::Pressed,
 		std::make_unique<Shoot>(player2->GetWeapon().get()));

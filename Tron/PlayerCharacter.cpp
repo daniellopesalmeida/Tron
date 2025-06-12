@@ -12,6 +12,8 @@
 #include "PlayerStatsComponent.h"
 #include <StateComponent.h>
 #include "WeaponComponent.h"
+#include "MovementComponent.h"
+
 
 dae::PlayerCharacter::PlayerCharacter(dae::Scene& scene, float x , float y, int playerId, int maxHealth)
     :m_PlayerID{playerId},m_PlayerMaxHealth{maxHealth}
@@ -65,7 +67,7 @@ dae::PlayerCharacter::PlayerCharacter(dae::Scene& scene, float x , float y, int 
         std::cout << "Player character has no transform!" << std::endl;
     }
     
-    
+    //add texture
     auto render = m_GameObject->AddComponent<RenderComponent>();
     render->SetTexture(texturePath);
 
@@ -106,6 +108,9 @@ dae::PlayerCharacter::PlayerCharacter(dae::Scene& scene, float x , float y, int 
     m_WeaponObject->SetPosition(static_cast<float>(tanksize.x / 2 - weaponsize.x / 2), static_cast<float>(tanksize.y / 2 - weaponsize.y / 2));
     m_WeaponObject->AddComponent<WeaponComponent>(scene, bulletTexturePath);
     m_GameObject->AddChild(m_WeaponObject);
+
+    //add movement comp
+    m_GameObject->AddComponent< dae::MovementComponent>();
 
     m_GameObject->AddComponent<dae::StateComponent>();
 

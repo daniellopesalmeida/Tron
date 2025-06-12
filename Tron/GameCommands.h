@@ -6,6 +6,7 @@
 #include "PlayerState.h"
 #include <memory>
 #include "WeaponComponent.h"
+#include <MovementComponent.h>
 
 
 class Move final : public dae::GameObjectCommand
@@ -18,16 +19,22 @@ public:
 
 	~Move() = default;
 
-	void Execute(float deltaTime) override
+	void Execute(float) override
 	{
+		auto moveComp = GetGameObject()->GetComponent<dae::MovementComponent>();
+		if (moveComp)
+		{
+			moveComp->SetSpeed(m_Speed);
+			moveComp->SetDirection(m_Direction);
+		}
 		//std::cout << "Command Move executed!" << std::endl;
 
-		auto pos = GetGameObject()->GetTransform()->GetLocalPosition();
-		pos.x += m_Direction.x * m_Speed * deltaTime;
-		pos.y += m_Direction.y * m_Speed * deltaTime;
-		GetGameObject()->SetPosition(pos.x, pos.y);
-
-		//std::cout << "Moved GameObject to (" << pos.x << ", " << pos.y << ")" << std::endl;
+		//auto pos = GetGameObject()->GetTransform()->GetLocalPosition();
+		//pos.x += m_Direction.x * m_Speed * deltaTime;
+		//pos.y += m_Direction.y * m_Speed * deltaTime;
+		//GetGameObject()->SetPosition(pos.x, pos.y);
+		//
+		////std::cout << "Moved GameObject to (" << pos.x << ", " << pos.y << ")" << std::endl;
 		// Get the StateComponent attached to the GameObject
 		auto stateComponent = GetGameObject()->GetComponent<dae::StateComponent>();
 		if (stateComponent)
@@ -64,6 +71,25 @@ public:
 private:
 	glm::vec2 m_Direction;
 	float m_Speed;
+};
+
+class StopMove final : public dae::GameObjectCommand
+{
+public:
+	StopMove(dae::GameObject* pGameObject)
+		: GameObjectCommand(pGameObject)
+	{
+	}
+
+	void Execute(float) override
+	{
+		auto moveComp = GetGameObject()->GetComponent<dae::MovementComponent>();
+		if (moveComp)
+		{
+			std::cout << "StopMoving!" << std::endl;
+			moveComp->Stop();
+		}
+	}
 };
 
 class Debug final : public dae::GameObjectCommand

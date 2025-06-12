@@ -19,6 +19,7 @@ public:
     {
         CopyMemory(&m_PreviousState, &m_CurrentState, sizeof(XINPUT_STATE));
         ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE));
+        XInputGetState(m_ControllerIdx, &m_CurrentState);
         
         DWORD result = XInputGetState(m_ControllerIdx, &m_CurrentState);
         if (result != ERROR_SUCCESS)
@@ -37,23 +38,33 @@ public:
             std::cout << "Controller " << m_ControllerIdx  << " connected." << std::endl;
             m_WasConnected = true;
         }
+
+        WORD prevButtons = m_PreviousState.Gamepad.wButtons;
+        WORD currButtons = m_CurrentState.Gamepad.wButtons;
+
+        int buttonChanges = m_CurrentState.Gamepad.wButtons ^ m_PreviousState.Gamepad.wButtons;
+        m_ButtonsPressedThisFrame = buttonChanges & m_CurrentState.Gamepad.wButtons;
+        m_ButtonsReleasedThisFrame = buttonChanges & (~m_CurrentState.Gamepad.wButtons);
+
+        std::cout << "[DEBUG] Prev: " << prevButtons << " Curr: " << currButtons
+            << " Pressed: " << m_ButtonsPressedThisFrame
+            << " Released: " << m_ButtonsReleasedThisFrame << "\n";
     }
 
-    bool IsDownThisFrame(GamepadButton button)
+    bool IsDownThisFrame(unsigned int button)
     {
-        return (m_CurrentState.Gamepad.wButtons & static_cast<WORD>(button)) &&
-            !(m_PreviousState.Gamepad.wButtons & static_cast<WORD>(button));
+        return m_ButtonsPressedThisFrame & button;
     }
 
-    bool IsUpThisFrame(GamepadButton button)
+    bool IsUpThisFrame(unsigned int button)
     {
-        return !(m_CurrentState.Gamepad.wButtons & static_cast<WORD>(button)) &&
-            (m_PreviousState.Gamepad.wButtons & static_cast<WORD>(button));
+        std::cout << "[DEBUG] DPad Down released\n";
+        return m_ButtonsReleasedThisFrame & button;
     }
 
-    bool IsPressed(GamepadButton button)
+    bool IsPressed(unsigned int button)
     {
-        return m_CurrentState.Gamepad.wButtons & static_cast<WORD>(button);
+        return m_CurrentState.Gamepad.wButtons & button;
     }
 
     glm::vec2 GetLeftStick() const
@@ -105,8 +116,11 @@ public:
 private:
     int m_ControllerIdx;  //(0, 1, 2, 3 for up to 4 controllers)
     bool m_WasConnected;  //connection state of the controller
+    XINPUT_STATE m_PreviousState{};
     XINPUT_STATE m_CurrentState{};
-    XINPUT_STATE m_PreviousState{}; 
+    WORD m_ButtonsPressedThisFrame{};
+    WORD m_ButtonsReleasedThisFrame{};
+    
 };
 
 dae::Controller::Controller(int controllerIdx):m_ControllerIdx{controllerIdx}
@@ -126,17 +140,17 @@ void dae::Controller::Update()
 
 bool dae::Controller::IsDownThisFrame(GamepadButton button)
 {
-	return m_pImpl->IsDownThisFrame(button);
+	return m_pImpl->IsDownThisFrame(static_cast<unsigned int>(button));
 }
 
 bool dae::Controller::IsUpThisFrame(GamepadButton button)
 {
-	return m_pImpl->IsUpThisFrame(button);
+	return m_pImpl->IsUpThisFrame(static_cast<unsigned int>(button));
 }
 
 bool dae::Controller::IsPressed(GamepadButton button)
 {
-	return m_pImpl->IsPressed(button);
+	return m_pImpl->IsPressed(static_cast<unsigned int>(button));
 }
 
 glm::vec2 dae::Controller::GetLeftStick() const

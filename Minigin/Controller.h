@@ -7,9 +7,6 @@ namespace dae
 {
 	class Controller
 	{
-        class ControllerImpl;
-        ControllerImpl* m_pImpl;
-
 	public:
     
         enum class GamepadButton
@@ -46,7 +43,8 @@ namespace dae
     
     
     private:
-        
+        class ControllerImpl;
+        ControllerImpl* m_pImpl;
         int m_ControllerIdx;
 	};
 }

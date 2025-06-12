@@ -169,32 +169,38 @@ void dae::InputManager::UpdateControllerInput(float deltaTime)
         controller->Update();
         int controllerIdx = controller->GetIndex();
 
-        // Directional input priority: Up > Down > Left > Right
-        std::vector<std::tuple<int, Controller::GamepadButton, KeyState>> priorityButtons = {
-            {controllerIdx, Controller::GamepadButton::DPadUp, KeyState::Down},
-            {controllerIdx, Controller::GamepadButton::DPadDown, KeyState::Down},
-            {controllerIdx, Controller::GamepadButton::DPadLeft, KeyState::Down},
-            {controllerIdx, Controller::GamepadButton::DPadRight, KeyState::Down}
+        // Directional input handling for all key states (Pressed, Released, Down)
+        std::vector<Controller::GamepadButton> directionalButtons = {
+            Controller::GamepadButton::DPadUp,
+            Controller::GamepadButton::DPadDown,
+            Controller::GamepadButton::DPadLeft,
+            Controller::GamepadButton::DPadRight
         };
 
-        // Process only the first valid directional input
-        for (const auto& keyTuple : priorityButtons)
+        for (auto button : directionalButtons)
         {
-            auto it = m_ControllerCommands.find(keyTuple);
-            if (it != m_ControllerCommands.end())
+            std::tuple<int, Controller::GamepadButton, KeyState> pressedKey = { controllerIdx, button, KeyState::Pressed };
+            std::tuple<int, Controller::GamepadButton, KeyState> releasedKey = { controllerIdx, button, KeyState::Released };
+            std::tuple<int, Controller::GamepadButton, KeyState> downKey = { controllerIdx, button, KeyState::Down };
+
+            if (m_ControllerCommands.contains(pressedKey) && controller->IsDownThisFrame(button))
             {
-                const auto& [idx, button, state] = keyTuple;
-                if ((state == KeyState::Pressed && controller->IsDownThisFrame(button)) ||
-                    (state == KeyState::Released && controller->IsUpThisFrame(button)) ||
-                    (state == KeyState::Down && controller->IsPressed(button)))
-                {
-                    it->second->Execute(deltaTime);
-                    break; 
-                }
+                m_ControllerCommands[pressedKey]->Execute(deltaTime);
+                break;
+            }
+            if (m_ControllerCommands.contains(releasedKey) && controller->IsUpThisFrame(button))
+            {
+                m_ControllerCommands[releasedKey]->Execute(deltaTime);
+                break;
+            }
+            if (m_ControllerCommands.contains(downKey) && controller->IsPressed(button))
+            {
+                m_ControllerCommands[downKey]->Execute(deltaTime);
+                break;
             }
         }
 
-        // Process other (non-directional) controller inputs
+        // Handle all other buttons (non-directional)
         for (auto& [key, command] : m_ControllerCommands)
         {
             int assignedControllerIdx;
@@ -202,30 +208,33 @@ void dae::InputManager::UpdateControllerInput(float deltaTime)
             KeyState state;
             std::tie(assignedControllerIdx, button, state) = key;
 
-            // Skip directional keys (handled above)
+            // Skip if this controller doesn't match
+            if (controllerIdx != assignedControllerIdx)
+                continue;
+
+            // Skip directional buttons here (already processed above)
             if (button == Controller::GamepadButton::DPadUp ||
                 button == Controller::GamepadButton::DPadDown ||
                 button == Controller::GamepadButton::DPadLeft ||
                 button == Controller::GamepadButton::DPadRight)
                 continue;
 
-            if (controllerIdx == assignedControllerIdx)
+            switch (state)
             {
-                switch (state)
-                {
-                case KeyState::Pressed:
-                    if (controller->IsDownThisFrame(button))
-                        command->Execute(deltaTime);
-                    break;
-                case KeyState::Down:
-                    if (controller->IsPressed(button))
-                        command->Execute(deltaTime);
-                    break;
-                case KeyState::Released:
-                    if (controller->IsUpThisFrame(button))
-                        command->Execute(deltaTime);
-                    break;
-                }
+            case KeyState::Pressed:
+                if (controller->IsDownThisFrame(button))
+                    command->Execute(deltaTime);
+                break;
+
+            case KeyState::Released:
+                if (controller->IsUpThisFrame(button))
+                    command->Execute(deltaTime);
+                break;
+
+            case KeyState::Down:
+                if (controller->IsPressed(button))
+                    command->Execute(deltaTime);
+                break;
             }
         }
     }
