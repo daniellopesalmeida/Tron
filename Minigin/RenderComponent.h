@@ -31,12 +31,16 @@ namespace dae
 
 		glm::ivec2 GetSize() const;
 		void SetSize(const glm::ivec2& size) { m_CustomSize = size; }
+		void SetScale(const glm::vec2& scale) { m_Scale = scale; }
+		void SetScale(float uniformScale) { m_Scale = glm::vec2{ uniformScale }; }
 		void SetRotation(float angle);
+		float GetRotation() { return m_RotationAngle; }
 
 	private:
 		
 		std::shared_ptr<Texture2D> m_Texture{};
 		glm::ivec2 m_CustomSize{ -1, -1 };
+		glm::vec2 m_Scale{ 1.0f, 1.0f };
 		float m_RotationAngle{ 0.0f };
 	};
 }

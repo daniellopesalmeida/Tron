@@ -528,25 +528,31 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BulletComponent.cpp" />
     <ClCompile Include="DisplayHealthComponent.cpp" />
     <ClCompile Include="DisplayScoreComponent.cpp" />
     <ClCompile Include="FPSComponent.cpp" />
     <ClCompile Include="GameCommands.cpp" />
+    <ClCompile Include="LevelCreator.cpp" />
     <ClCompile Include="PlayerCharacter.cpp" />
     <ClCompile Include="PlayerState.cpp" />
     <ClCompile Include="PlayerStatsComponent.cpp" />
     <ClCompile Include="ThrashTheCacheComponent.cpp" />
     <ClCompile Include="Tron.cpp" />
+    <ClCompile Include="WeaponComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BulletComponent.h" />
     <ClInclude Include="DisplayHealthComponent.h" />
     <ClInclude Include="DisplayScoreComponent.h" />
     <ClInclude Include="FPSComponent.h" />
     <ClInclude Include="GameCommands.h" />
+    <ClInclude Include="LevelCreator.h" />
     <ClInclude Include="PlayerCharacter.h" />
     <ClInclude Include="PlayerState.h" />
     <ClInclude Include="PlayerStatsComponent.h" />
     <ClInclude Include="ThrashTheCacheComponent.h" />
+    <ClInclude Include="WeaponComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

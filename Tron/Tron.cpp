@@ -27,13 +27,12 @@
 #include <SDLSoundSystem.h>
 #include <LoggingSoundSystem.h>
 #include "PlayerCharacter.h"
+#include "LevelCreator.h"
 
 
-
-
-void W01(dae::Scene& scene);
 void W06(dae::Scene& scene);
 void TestScene(dae::Scene& scene);
+void StartMenu(dae::Scene& scene);
 
 namespace fs = std::filesystem;
 constexpr int MAX_TRAVERSAL = 5;
@@ -64,8 +63,8 @@ std::string FindDataFolder()
 
 void load()
 {
-	//auto& scene = dae::SceneManager::GetInstance().CreateScene("Current Assignment: Week06");
 	auto& testScene = dae::SceneManager::GetInstance().CreateScene("Test Scene");
+	auto& testScene2 = dae::SceneManager::GetInstance().CreateScene("Test Scene2");
 
 #if _DEBUG
 	dae::ServiceLocator::RegisterSoundSystem(
@@ -74,9 +73,9 @@ void load()
 	dae::ServiceLocator::RegisterSoundSystem(std::make_unique<dae::SDLSoundSystem>());
 #endif
 
-	//W06(scene);
-	TestScene(testScene);
-
+	StartMenu(testScene);
+	TestScene(testScene2);
+	dae::SceneManager::GetInstance().SetScene(testScene2);
 }
 int main(int, char* []) 
 {
@@ -87,29 +86,6 @@ int main(int, char* [])
 	return 0;
 }
 
-void W01(dae::Scene& scene)
-{
-	auto backGround = std::make_shared<dae::GameObject>();
-	backGround->AddComponent<dae::RenderComponent>()->SetTexture("background.tga");
-	scene.Add(backGround);
-
-	auto logo = std::make_shared<dae::GameObject>();
-	logo->AddComponent<dae::RenderComponent>()->SetTexture("logo.tga");
-	logo->SetPosition(216, 180);
-	scene.Add(logo);
-
-	auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	auto title = std::make_shared<dae::GameObject>();
-	title->AddComponent<dae::TextComponent>("Programming 4 Assignment", font);
-	title->SetPosition(100, 0);
-	scene.Add(title);
-
-	auto fps = std::make_shared<dae::GameObject>();
-	fps->AddComponent<dae::TextComponent>("0", font);
-	fps->AddComponent<FPSComponent>();
-	fps->SetPosition(0, 300);
-	scene.Add(fps);
-}
 
 void W06(dae::Scene& scene)
 {
@@ -290,9 +266,25 @@ void W06(dae::Scene& scene)
 
 void TestScene(dae::Scene& scene)
 {
+	
+	std::unordered_map<std::string, std::vector<glm::vec2>> positions{ };
+	auto level = LevelCreator::LoadLevel(scene, "../Data/Levels/Level1.csv", positions, glm::vec2{ 250,150 });
+	
+	glm::vec2 p1Spawn = { };
+	if (positions["P1"].size() > 0)
+	{
+		p1Spawn = positions["P1"][0];
+	}
+
+	glm::vec2 p2Spawn = {  }; 
+	if (positions["P2"].size() > 0)
+	{
+		p2Spawn = positions["P2"][0];
+	}
+
 	float tankSpeed = 100.f;
-	auto player1 = std::make_unique<dae::PlayerCharacter>(scene,100, 100,1);
-	auto player2 = std::make_unique<dae::PlayerCharacter>(scene, 200, 200, 2);
+	auto player1 = std::make_unique<dae::PlayerCharacter>(scene, p1Spawn.x, p1Spawn.y, 1);
+	auto player2 = std::make_unique<dae::PlayerCharacter>(scene, p2Spawn.x, p2Spawn.y, 2);
 
 	//keyboard input
 	//up
@@ -307,6 +299,9 @@ void TestScene(dae::Scene& scene)
 	//left
 	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_A, dae::KeyState::Down,
 		std::make_unique<Move>(player1->GetPlayer().get(), glm::vec2{ -1, 0 }, tankSpeed));
+	// shoot
+	dae::InputManager::GetInstance().AddKeyboardCommand(SDL_SCANCODE_SPACE, dae::KeyState::Pressed,
+		std::make_unique<Shoot>(player1->GetWeapon().get()));
 
 	//controller
 	dae::InputManager::GetInstance().AddController(0);
@@ -322,4 +317,26 @@ void TestScene(dae::Scene& scene)
 	//left
 	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::DPadLeft, dae::KeyState::Down,
 		std::make_unique<Move>(player2->GetPlayer().get(), glm::vec2{ -1, 0 }, tankSpeed ));
+	// shoot
+	dae::InputManager::GetInstance().AddControllerCommand(0, dae::Controller::GamepadButton::A, dae::KeyState::Pressed,
+		std::make_unique<Shoot>(player2->GetWeapon().get()));
+}
+
+void StartMenu(dae::Scene& scene)
+{
+	auto tronLogo = std::make_shared<dae::GameObject>();
+	auto texture = tronLogo->AddComponent<dae::RenderComponent>();
+	texture->SetTexture("tron_marquee.jpg");
+	texture->SetScale(0.40f);
+	tronLogo->SetPosition(320.f - (texture->GetSize().x / 2), 0.f);
+	scene.Add(tronLogo);
+
+	
+	auto font = dae::ResourceManager::GetInstance().LoadFont("tronFont/tron.ttf", 20);
+	auto button = std::make_shared<dae::GameObject>();
+	auto buttonText = button->AddComponent<dae::TextComponent>("Single Player",font);
+	buttonText->SetBold(true);
+	buttonText->SetColor(SDL_Color(150, 0, 255));
+	button->SetPosition(320.f - (buttonText->GetSize().x/2), 310.f);
+	scene.Add(button);
 }

@@ -26,13 +26,15 @@ void dae::RenderComponent::Render()
 	const auto& position = transform->GetWorldPosition();
 
 	// Determine texture size
-	glm::ivec2 textureSize = (m_CustomSize.x > 0 && m_CustomSize.y > 0)
+	glm::ivec2 baseSize = (m_CustomSize.x > 0 && m_CustomSize.y > 0)
 		? m_CustomSize
 		: m_Texture->GetSize();
 
+	glm::vec2 finalSize = glm::vec2(baseSize) * m_Scale;
+
 	// Render with rotation
 	Renderer::GetInstance().RenderTexture(*m_Texture, position.x, position.y,
-		static_cast<float>(textureSize.x), static_cast<float>(textureSize.y),
+		static_cast<float>(finalSize.x), static_cast<float>(finalSize.y),
 		m_RotationAngle);
 
 }
@@ -77,10 +79,13 @@ void dae::RenderComponent::SetTexture(std::shared_ptr<Texture2D> texture,  int s
 
 glm::ivec2 dae::RenderComponent::GetSize() const
 {
-	if(m_CustomSize.x > 0 && m_CustomSize.y > 0)
-		return m_CustomSize;
+	glm::ivec2 baseSize = (m_CustomSize.x > 0 && m_CustomSize.y > 0)
+		? m_CustomSize
+		: m_Texture->GetSize();
 
-	return m_Texture->GetSize();
+	glm::vec2 scaledSize = glm::vec2(baseSize) * m_Scale;
+
+	return glm::ivec2{ static_cast<int>(scaledSize.x), static_cast<int>(scaledSize.y) };
 }
 
 void dae::RenderComponent::SetRotation(float angle)

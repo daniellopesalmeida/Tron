@@ -16,7 +16,7 @@ namespace dae
 		void FixedUpdate();
 		void Render() const;
 
-		void SetPosition(float x, float y);
+		void SetPosition(float x, float y, float z = 0.f);
 		void SetPosition(glm::vec3 position);
 
 		TransformComponent* GetTransform() const { return m_Transform; }

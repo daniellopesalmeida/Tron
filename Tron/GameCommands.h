@@ -5,6 +5,7 @@
 #include <StateComponent.h>
 #include "PlayerState.h"
 #include <memory>
+#include "WeaponComponent.h"
 
 
 class Move final : public dae::GameObjectCommand
@@ -164,4 +165,29 @@ public:
 
 private:
 	bool m_Paused = false;
+};
+
+class Shoot final : public dae::GameObjectCommand
+{
+public:
+	Shoot(dae::GameObject* pGameObject)
+		: GameObjectCommand(pGameObject)
+	{
+	}
+
+	~Shoot() = default;
+
+	void Execute(float) override
+	{
+		auto weapon = GetGameObject()->GetComponent<WeaponComponent>();
+		if (weapon)
+		{
+			weapon->Shoot();
+			std::cout << "Shoot!" << std::endl;
+		}
+		else
+		{
+			std::cout << "No WeaponComponent!" << std::endl;
+		}
+	}
 };

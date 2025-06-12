@@ -56,18 +56,18 @@ void dae::GameObject::FixedUpdate()
 
 void dae::GameObject::Render() const
 {	
+	for (const auto& comp : m_Components) comp->Render();
+
 	for (const auto& child : m_pChildren)
 	{
 		child->Render();
 	}
-
-	for (const auto& comp : m_Components) comp->Render();
 }
 
 
-void dae::GameObject::SetPosition(float x, float y)
+void dae::GameObject::SetPosition(float x, float y,float z)
 {
-	m_Transform->SetPosition(x, y, 0.0f);
+	m_Transform->SetPosition(x, y, z);
 }
 
 void dae::GameObject::SetPosition(glm::vec3 position)

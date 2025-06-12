@@ -11,9 +11,10 @@
 #include "DisplayScoreComponent.h"
 #include "PlayerStatsComponent.h"
 #include <StateComponent.h>
+#include "WeaponComponent.h"
 
-dae::PlayerCharacter::PlayerCharacter(dae::Scene& scene, int x , int y, int playerId)
-    :m_PlayerID{playerId}
+dae::PlayerCharacter::PlayerCharacter(dae::Scene& scene, float x , float y, int playerId, int maxHealth)
+    :m_PlayerID{playerId},m_PlayerMaxHealth{maxHealth}
 {
     
     if (m_PlayerID != 1 && m_PlayerID != 2)
@@ -22,7 +23,9 @@ dae::PlayerCharacter::PlayerCharacter(dae::Scene& scene, int x , int y, int play
         return;
     }
 
-    std::string texturePath;
+    std::string texturePath{};
+    std::string weaponTexturePath{};
+    std::string bulletTexturePath{};
     SDL_Color textColor{};
     std::string playerLabel;
     glm::vec3 scorePos{};
@@ -31,6 +34,8 @@ dae::PlayerCharacter::PlayerCharacter(dae::Scene& scene, int x , int y, int play
     if (m_PlayerID == 1)
     {
         texturePath = "player1.png";
+        weaponTexturePath= "RedGun.png";
+        bulletTexturePath = "BulletPlayer1.png";
         textColor = SDL_Color(255, 0, 0);
         playerLabel = "P1";
         healthPos={ 10,50,0 };
@@ -40,6 +45,8 @@ dae::PlayerCharacter::PlayerCharacter(dae::Scene& scene, int x , int y, int play
     else // playerId == 2
     {
         texturePath = "player2.png";
+        weaponTexturePath = "GreenTankGun.png";
+        bulletTexturePath = "BulletPlayer2.png";
         textColor = SDL_Color{ 100, 255, 100 };
         playerLabel = "P2";
         healthPos = { 300,50,0 };
@@ -57,6 +64,7 @@ dae::PlayerCharacter::PlayerCharacter(dae::Scene& scene, int x , int y, int play
     {
         std::cout << "Player character has no transform!" << std::endl;
     }
+    
     
     auto render = m_GameObject->AddComponent<RenderComponent>();
     render->SetTexture(texturePath);
@@ -77,11 +85,11 @@ dae::PlayerCharacter::PlayerCharacter(dae::Scene& scene, int x , int y, int play
     scene.Add(m_ScoreDisplay);
 
     // Set up observers for health and score
-    m_GameObject->AddComponent<PlayerStatsComponent>(5)->AddObserver(m_HealthDisplay->GetComponent<DisplayHealthComponent>());
+    m_GameObject->AddComponent<PlayerStatsComponent>(m_PlayerMaxHealth)->AddObserver(m_HealthDisplay->GetComponent<DisplayHealthComponent>());
     m_GameObject->GetComponent<PlayerStatsComponent>()->AddObserver(m_ScoreDisplay->GetComponent<DisplayScoreComponent>());
     m_HealthDisplay->GetComponent<dae::TextComponent>()->SetText(m_GameObject->GetComponent<PlayerStatsComponent>()->GetHealthString());
 
-    // Add child text (name or other information)
+    // Add child text
     auto playerNameText = std::make_shared<dae::GameObject>();
     playerNameText->AddComponent<dae::TextComponent>(playerLabel, fontHealth)->SetColor(textColor);
     auto playerNameTextSize = playerNameText->GetComponent<dae::TextComponent>()->GetSize();
@@ -89,7 +97,19 @@ dae::PlayerCharacter::PlayerCharacter(dae::Scene& scene, int x , int y, int play
     playerNameText->SetPosition(float(playerTextureSize.x / 2 - playerNameTextSize.x / 2), float(-playerNameTextSize.y - 5));
     m_GameObject->AddChild(playerNameText);
 
+    // add weapon to tank
+    m_WeaponObject = std::make_shared<dae::GameObject>();
+    m_WeaponObject->AddComponent<RenderComponent>()->SetTexture(weaponTexturePath);
+    auto tanksize = m_GameObject->GetComponent<dae::RenderComponent>()->GetSize();
+    auto weaponsize = m_WeaponObject->GetComponent<dae::RenderComponent>()->GetSize();
+    // m_WeaponObject->SetPosition(static_cast<float>( -size.x ), static_cast<float>(-size.y));
+    m_WeaponObject->SetPosition(static_cast<float>(tanksize.x / 2 - weaponsize.x / 2), static_cast<float>(tanksize.y / 2 - weaponsize.y / 2));
+    m_WeaponObject->AddComponent<WeaponComponent>(scene, bulletTexturePath);
+    m_GameObject->AddChild(m_WeaponObject);
+
     m_GameObject->AddComponent<dae::StateComponent>();
 
     scene.Add(m_GameObject);
+
+
 }

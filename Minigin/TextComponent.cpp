@@ -107,4 +107,13 @@ glm::ivec2 dae::TextComponent::GetSize() const
 	return m_TextTexture->GetSize();
 }
 
+void dae::TextComponent::SetBold(bool bold)
+{
+	if (bold)
+		TTF_SetFontStyle(m_Font->GetFont(), TTF_STYLE_BOLD);
+	else
+		TTF_SetFontStyle(m_Font->GetFont(), TTF_STYLE_NORMAL);
+
+	m_NeedsUpdate = true;
+}
 

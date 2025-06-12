@@ -34,6 +34,8 @@ namespace dae
 		void RemoveControllerCommand(int controllerIdx,Controller::GamepadButton button, const KeyState state);
 		void UpdateControllerInput(float deltaTime);
 
+		void ClearInputs();
+
 	private:
 		//keyboard
 		std::unique_ptr<Keyboard> m_Keyboard{ std::make_unique<Keyboard>() };

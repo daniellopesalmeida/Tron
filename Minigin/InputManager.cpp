@@ -63,7 +63,7 @@ void dae::InputManager::UpdateKeyboardInput(float deltaTime)
                 (state == KeyState::Down && m_Keyboard->IsPressed(key)))
             {
                 it->second->Execute(deltaTime);
-                return; // Only process one movement input per frame
+                break; 
             }
         }
     }
@@ -189,7 +189,7 @@ void dae::InputManager::UpdateControllerInput(float deltaTime)
                     (state == KeyState::Down && controller->IsPressed(button)))
                 {
                     it->second->Execute(deltaTime);
-                    return; // Stop after processing the first valid direction
+                    break; 
                 }
             }
         }
@@ -229,4 +229,11 @@ void dae::InputManager::UpdateControllerInput(float deltaTime)
             }
         }
     }
+}
+
+void dae::InputManager::ClearInputs()
+{
+    m_ControllerCommands.clear();
+    m_KeyboardCommands.clear();
+    m_Controllers.clear();
 }

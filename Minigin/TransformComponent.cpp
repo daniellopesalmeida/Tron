@@ -1,4 +1,5 @@
 #include "TransformComponent.h"
+#include "GameObject.h"
 
 dae::TransformComponent::TransformComponent(GameObject* pOwner)
 	:Component(pOwner)
@@ -49,7 +50,6 @@ void dae::TransformComponent::SetParent(TransformComponent* gameObject)
 	m_parent = gameObject;
 }
 
-#include "GameObject.h"
 
 void dae::TransformComponent::SetPosDirty()
 {
