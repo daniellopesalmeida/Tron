@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "RenderComponent.h"
 #include "Scene.h"
+#include <CollisionComponent.h>
 
 std::shared_ptr<dae::GameObject> LevelCreator::LoadLevel(dae::Scene& scene,
 	std::string levelPath,
@@ -51,6 +52,8 @@ std::shared_ptr<dae::GameObject> LevelCreator::LoadLevel(dae::Scene& scene,
                 auto wall = std::make_shared<dae::GameObject>();
                 wall->SetPosition(worldPos.x, worldPos.y);
                 wall->AddComponent<dae::RenderComponent>()->SetTexture("Wall.png");
+                wall->AddComponent<dae::CollisionComponent>(glm::vec2{ m_BlockSize, m_BlockSize });
+                wall->SetTag("Wall");
                 levelRoot->AddChild(wall);
                 break;
             }

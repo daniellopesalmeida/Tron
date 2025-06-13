@@ -13,6 +13,7 @@
 #include <StateComponent.h>
 #include "WeaponComponent.h"
 #include "MovementComponent.h"
+#include <CollisionComponent.h>
 
 
 dae::PlayerCharacter::PlayerCharacter(dae::Scene& scene, float x , float y, int playerId, int maxHealth)
@@ -67,6 +68,8 @@ dae::PlayerCharacter::PlayerCharacter(dae::Scene& scene, float x , float y, int 
         std::cout << "Player character has no transform!" << std::endl;
     }
     
+    //add tag
+    m_GameObject->SetTag(playerLabel);
     //add texture
     auto render = m_GameObject->AddComponent<RenderComponent>();
     render->SetTexture(texturePath);
@@ -101,6 +104,7 @@ dae::PlayerCharacter::PlayerCharacter(dae::Scene& scene, float x , float y, int 
 
     // add weapon to tank
     m_WeaponObject = std::make_shared<dae::GameObject>();
+    m_WeaponObject->SetTag(playerLabel);
     m_WeaponObject->AddComponent<RenderComponent>()->SetTexture(weaponTexturePath);
     auto tanksize = m_GameObject->GetComponent<dae::RenderComponent>()->GetSize();
     auto weaponsize = m_WeaponObject->GetComponent<dae::RenderComponent>()->GetSize();
@@ -113,6 +117,22 @@ dae::PlayerCharacter::PlayerCharacter(dae::Scene& scene, float x , float y, int 
     m_GameObject->AddComponent< dae::MovementComponent>();
 
     m_GameObject->AddComponent<dae::StateComponent>();
+
+    //add collision comp
+    glm::vec2 offset{ 2.f, 2.f };
+    auto collision = m_GameObject->AddComponent<dae::CollisionComponent>(glm::vec2{ float(tanksize.x)-2, float(tanksize.y)-2 }-offset);
+    collision->SetOffset(offset);
+    collision->SetCollisionCallback([](dae::CollisionComponent* self, dae::CollisionComponent* other)
+        {
+            auto owner = self->GetOwnerPublic();
+            if (!owner) return;
+
+            // MovementComponent handles path-blocking logic
+            auto movement = owner->GetComponent<dae::MovementComponent>();
+            if (movement) movement->OnCollision(other);
+
+            
+        });
 
     scene.Add(m_GameObject);
 

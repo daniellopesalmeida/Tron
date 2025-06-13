@@ -13,6 +13,8 @@
 #include "Time.h"
 #include "thread"
 
+#include "CollisionManager.h"
+
 
 SDL_Window* g_window{};
 
@@ -86,6 +88,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
+	auto& collisionManager = CollisionManager::GetInstance();
 
 	// todo: this update loop could use some work.
 	bool doContinue = true;
@@ -110,6 +113,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		while (lag >= timePerFrame)
 		{
 			sceneManager.FixedUpdate();
+			collisionManager.FixedUpdate();
 			lag -= timePerFrame;
 		}
 

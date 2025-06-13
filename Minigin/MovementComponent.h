@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.h"
 #include <glm.hpp>
+#include "CollisionComponent.h"
 namespace dae
 {
     class TransformComponent;
@@ -21,11 +22,18 @@ namespace dae
 
         void Update(float deltaTime)override;
 
+        void StayInPathPosition();
+
+        glm::vec2 GetLastPosition() const { return m_LastPosition; }
+        
+        void OnCollision(CollisionComponent* other);
+
 
     private:
         TransformComponent* m_Transform{};
         glm::vec2 m_Direction{ 0.f, 0.f };
         float m_Speed{ 100.f };
+        glm::vec2 m_LastPosition{};
     };
 }
 

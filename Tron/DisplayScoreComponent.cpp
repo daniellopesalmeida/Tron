@@ -16,7 +16,7 @@ void DisplayScoreComponent::OnNotify(dae::GameObject* entity, dae::Event event)
     case dae::Event::RESET_ACHIEVEMENTS:
         if (auto statsComponent = entity->GetComponent<PlayerStatsComponent>())
         {
-            m_ScoreText = "Score: " + std::to_string(statsComponent->GetScore());
+            m_ScoreText = "Score " + std::to_string(statsComponent->GetScore());
             m_TextComponent->SetText(m_ScoreText);
         }
         break;

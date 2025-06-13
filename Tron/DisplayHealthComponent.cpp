@@ -20,13 +20,19 @@ void DisplayHealthComponent::OnNotify(dae::GameObject* entity, dae::Event event)
     case dae::Event::RESET_ACHIEVEMENTS:
         if (auto statsComponent = entity->GetComponent<PlayerStatsComponent>())
         {
-            m_healthText = "Health: " + std::to_string(statsComponent->GetHealth());
+            int health = statsComponent->GetHealth();
+            std::string currHealth{};
+            for (int idx = 1; idx<=health; idx++)
+            {
+                currHealth += '#';
+            }
+            m_healthText = "Health " + currHealth;
             m_TextComponent->SetText(m_healthText);
         }
         break;
 
     case dae::Event::PLAYER_DIED:
-        m_healthText = "Player Died!";
+        m_healthText = "Player Died";
         m_TextComponent->SetText(m_healthText);
         break;
 

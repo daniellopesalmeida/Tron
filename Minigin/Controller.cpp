@@ -39,16 +39,16 @@ public:
             m_WasConnected = true;
         }
 
-        WORD prevButtons = m_PreviousState.Gamepad.wButtons;
-        WORD currButtons = m_CurrentState.Gamepad.wButtons;
+        //WORD prevButtons = m_PreviousState.Gamepad.wButtons;
+        //WORD currButtons = m_CurrentState.Gamepad.wButtons;
 
         int buttonChanges = m_CurrentState.Gamepad.wButtons ^ m_PreviousState.Gamepad.wButtons;
         m_ButtonsPressedThisFrame = buttonChanges & m_CurrentState.Gamepad.wButtons;
         m_ButtonsReleasedThisFrame = buttonChanges & (~m_CurrentState.Gamepad.wButtons);
 
-        std::cout << "[DEBUG] Prev: " << prevButtons << " Curr: " << currButtons
-            << " Pressed: " << m_ButtonsPressedThisFrame
-            << " Released: " << m_ButtonsReleasedThisFrame << "\n";
+        //std::cout << "[DEBUG] Prev: " << prevButtons << " Curr: " << currButtons
+        //    << " Pressed: " << m_ButtonsPressedThisFrame
+        //    << " Released: " << m_ButtonsReleasedThisFrame << "\n";
     }
 
     bool IsDownThisFrame(unsigned int button)
@@ -58,7 +58,7 @@ public:
 
     bool IsUpThisFrame(unsigned int button)
     {
-        std::cout << "[DEBUG] DPad Down released\n";
+        //std::cout << "[DEBUG] DPad Down released\n";
         return m_ButtonsReleasedThisFrame & button;
     }
 

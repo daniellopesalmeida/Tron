@@ -2,15 +2,16 @@
 #include "Singleton.h"
 #include "GameObject.h"
 #include "CollisionComponent.h"
+#include <vector>
 
 namespace dae
 {
 	class CollisionManager final : public Singleton<CollisionManager>
 	{
 	public:
-
+		
 		//void Update(float deltaTime);
-		//void FixedUpdate();
+		void FixedUpdate();
 
 		void AddColisionComponent(CollisionComponent* comp);
 		void RemoveColisionComponent(CollisionComponent* comp);

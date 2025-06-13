@@ -35,6 +35,10 @@ namespace dae
 		GameObject* GetParent() const { return m_Parent; }
 		const std::vector<std::shared_ptr<GameObject>>& GetChildren() { return m_pChildren; }
 
+		void SetTag(const std::string& tag) { m_Tag = tag; }
+		const std::string& GetTag() const { return m_Tag; }
+		bool HasTag(const std::string& tag) const { return m_Tag == tag; }
+
 		// Create and add a new component, returning a pointer to it
 		template <typename T, typename... TArgs>
 		T* AddComponent(TArgs&&... args);
@@ -66,6 +70,7 @@ namespace dae
 		bool m_MarkedForDelete{ false };
 		GameObject* m_Parent{ nullptr };
 		std::vector<std::shared_ptr<GameObject>> m_pChildren{};
+		std::string m_Tag{ "Default" };
 	};
 
 	
