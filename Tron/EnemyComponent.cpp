@@ -183,7 +183,7 @@ void EnemyComponent::Render()
     SDL_Renderer* renderer = dae::Renderer::GetInstance().GetSDLRenderer();
 
     auto pos = m_Nodes;
-    for(int idx=0;idx<pos.size();++idx)
+    for(size_t idx=0;idx<pos.size();++idx)
     {
         SDL_Rect rect{
             static_cast<int>(pos[idx].x-1),
