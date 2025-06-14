@@ -4,22 +4,22 @@
 dae::TransformComponent::TransformComponent(GameObject* pOwner)
 	:Component(pOwner)
 {
-	SetPosition(0, 0, 0);
+	SetPosition(0, 0);
 }
 
-void dae::TransformComponent::SetPosition(glm::vec3 position)
+void dae::TransformComponent::SetPosition(glm::vec2 position)
 {
 	m_LocalPosition = position;
 	SetPosDirty();
 }
 
-void dae::TransformComponent::SetPosition(const float x, const float y, const float z)
+void dae::TransformComponent::SetPosition(const float x, const float y)
 {
-	m_LocalPosition = glm::vec3(x, y, z);
+	m_LocalPosition = glm::vec2(x, y);
 	SetPosDirty();
 }
 
-const glm::vec3 dae::TransformComponent::GetWorldPosition()
+const glm::vec2 dae::TransformComponent::GetWorldPosition()
 {
 	if (m_IsPosDirty)
 	{

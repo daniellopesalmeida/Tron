@@ -61,7 +61,7 @@ dae::PlayerCharacter::PlayerCharacter(dae::Scene& scene, float x , float y, int 
     auto transform = m_GameObject->GetComponent<TransformComponent>();
     if (transform)
     {
-        transform->SetPosition(static_cast<float>(x), static_cast<float>(y));
+        transform->SetPosition(static_cast<float>(x)+1, static_cast<float>(y)+1);
     }
     else
     {
@@ -121,7 +121,7 @@ dae::PlayerCharacter::PlayerCharacter(dae::Scene& scene, float x , float y, int 
     //add collision comp
     glm::vec2 offset{ 2.f, 2.f };
     auto collision = m_GameObject->AddComponent<dae::CollisionComponent>(glm::vec2{ float(tanksize.x)-2, float(tanksize.y)-2 }-offset);
-    collision->SetOffset(offset);
+    //collision->SetOffset(offset);
     collision->SetCollisionCallback([](dae::CollisionComponent* self, dae::CollisionComponent* other)
         {
             auto owner = self->GetOwnerPublic();

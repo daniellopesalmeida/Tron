@@ -32,13 +32,14 @@ void dae::SceneManager::SetScene(Scene& scene)
 		{
 			if (m_CurrentScene)
 			{
-				//dae::InputManager::GetInstance().ClearInputs();
+				
 				m_CurrentScene->RemoveAll();
 
 			}
-
+			//InputManager::GetInstance().ClearInputs();
 
 			m_CurrentScene = s;
+			
 			return;
 		}
 	}
@@ -50,7 +51,16 @@ void dae::SceneManager::SetScene(const std::string& name)
 	{
 		if (scene->GetSceneName() == name)
 		{
+			if (m_CurrentScene)
+			{
+				m_CurrentScene->RemoveAll();
+			}
+
+			//InputManager::GetInstance().ClearInputs();
+
 			m_CurrentScene = scene;
+			
+
 			return;
 		}
 	}
@@ -64,13 +74,12 @@ std::shared_ptr<dae::Scene> dae::SceneManager::GetScene(std::string sceneName)
 		{
 			return scene;
 		}
-		else
-		{
-			std::cout << "no scene with name "" << sceneName << "" found!" << std::endl;
-		}
 	}
+	std::cout << "No scene with name \"" << sceneName << "\" found!" << std::endl;
 	return nullptr;
 }
+
+
 
 dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
 {

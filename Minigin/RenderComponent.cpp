@@ -33,7 +33,7 @@ void dae::RenderComponent::Render()
 	glm::vec2 finalSize = glm::vec2(baseSize) * m_Scale;
 
 	// Render with rotation
-	Renderer::GetInstance().RenderTexture(*m_Texture, position.x, position.y,
+	Renderer::GetInstance().RenderTexture(*m_Texture, position.x-m_Offset.x, position.y-m_Offset.y,
 		static_cast<float>(finalSize.x), static_cast<float>(finalSize.y),
 		m_RotationAngle);
 

@@ -2,7 +2,7 @@
 #include <string>
 #include <Scene.h>
 #include <unordered_map>
-#include <vec2.hpp>
+#include <glm.hpp>
 
 
 class LevelCreator final
@@ -19,9 +19,9 @@ class LevelCreator final
 
 public:
 	static std::shared_ptr<dae::GameObject> LoadLevel(dae::Scene& scene, std::string levelPath,
-		std::unordered_map<std::string, std::vector<glm::vec2>>& outPositions, glm::vec2 pos = glm::vec2{ 0.f,0.f });
+		std::unordered_map<std::string, std::vector<glm::vec2>>& outPositions, std::vector<glm::vec2> &nodePositions, glm::vec2 pos = glm::vec2{ 0.f,0.f });
 
 private:
-	inline static float m_BlockSize{ 35.f };
+	inline static float m_BlockSize{ 36.f };
 };
 

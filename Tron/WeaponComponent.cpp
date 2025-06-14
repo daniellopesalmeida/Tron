@@ -5,6 +5,8 @@
 #include "SceneManager.h"
 #include <iostream>
 #include "PlayerStatsComponent.h"
+#include <ServiceLocator.h>
+#include "EnemyComponent.h"
 
 WeaponComponent::WeaponComponent(dae::GameObject* pOwner, dae::Scene& scene, std::string bulletTexture)
 	:Component(pOwner) , m_CurrentAngle{0.0f} , m_Scene{scene},m_BulletTexture{bulletTexture}
@@ -34,6 +36,10 @@ void WeaponComponent::Shoot()
     auto bullet = std::make_shared<dae::GameObject>();
     //tag
     auto tag = GetOwner()->GetTag();
+
+    //get tank parent
+    auto parentGO = GetOwner()->GetParent();
+
     bullet->SetTag("Bullet" + tag);
     std::cout << "bullet tag: " << bullet->GetTag() << std::endl;
 
@@ -78,7 +84,7 @@ void WeaponComponent::Shoot()
     auto bulletComp=bullet->GetComponent<BulletComponent>();
 
     collision->SetCollisionCallback(
-        [bulletComp](dae::CollisionComponent* self, dae::CollisionComponent* other)
+        [bulletComp, parentGO](dae::CollisionComponent* self, dae::CollisionComponent* other)
         {
             auto otherGO = other->GetOwnerPublic();
             auto selfGO = self->GetOwnerPublic();
@@ -92,12 +98,23 @@ void WeaponComponent::Shoot()
             // --- Player/enemy hit logic ---
             if (bulletTag != "Bullet" + otherTag)
             {
-                if (auto stats = otherGO->GetComponent<PlayerStatsComponent>())
+                auto statsOther = otherGO->GetComponent<PlayerStatsComponent>();
+                
+                if(statsOther)
                 {
                     std::cout << "Hit player! Taking damage.\n";
-                    stats->TakeDamage(1);
-                    stats->AddScore(100);
+                    statsOther->TakeDamage(1);
                     selfGO->Delete();  // Delete bullet
+                    return;
+                }
+                // Enemy hit
+                
+                else if (otherTag == "Enemy")
+                {
+                    std::cout << "Enemy hit!\n";
+                    otherGO->Delete();
+                    selfGO->Delete(); // delete bullet
+                    parentGO->GetComponent<PlayerStatsComponent>()->AddScore(200);
                     return;
                 }
             }
@@ -122,11 +139,13 @@ void WeaponComponent::Shoot()
 
                 bulletComp->SetDirection(glm::normalize(reflectedDir));
                 bulletComp->IncrementBounce();
-                
             }
         });
 
     
 
     m_Scene.Add(bullet);
+    
+    auto& soundSystem = dae::ServiceLocator::GetSoundSystem();
+    soundSystem.Play(2, 0.5f, dae::SoundType::SoundEffect);
 }

@@ -7,13 +7,14 @@
 #include <memory>
 #include "WeaponComponent.h"
 #include <MovementComponent.h>
+#include "TextButtonComponent.h"
 
 
 class Move final : public dae::GameObjectCommand
 {
 
 public:
-	Move(dae::GameObject* pGameObject, glm::vec2 direction, float speed = 1.f)
+	Move(dae::GameObject* pGameObject, glm::vec2 direction, float speed = 100.f)
 		: GameObjectCommand(pGameObject), m_Direction{ direction }, m_Speed{ speed } 
 	{};
 
@@ -214,6 +215,59 @@ public:
 		else
 		{
 			std::cout << "No WeaponComponent!" << std::endl;
+		}
+	}
+};
+class ScreenMoveLeft final : public dae::GameObjectCommand
+{
+public:
+	ScreenMoveLeft(dae::GameObject* pGameObject)
+		: GameObjectCommand(pGameObject)
+	{
+	}
+	~ScreenMoveLeft() = default;
+
+	void Execute(float) override
+	{
+		if (auto button = GetGameObject()->GetComponent<TextButtonComponent>())
+		{
+			button->Scroll(-1); // left 
+		}
+	}
+};
+
+class ScreenMoveRight final : public dae::GameObjectCommand
+{
+public:
+	ScreenMoveRight(dae::GameObject* pGameObject)
+		: GameObjectCommand(pGameObject)
+	{
+	}
+	~ScreenMoveRight() = default;
+
+	void Execute(float) override
+	{
+		if (auto button = GetGameObject()->GetComponent<TextButtonComponent>())
+		{
+			button->Scroll(1); // right
+		}
+	}
+};
+
+class ScreenSelect final : public dae::GameObjectCommand
+{
+public:
+	ScreenSelect(dae::GameObject* pGameObject)
+		: GameObjectCommand(pGameObject)
+	{
+	}
+	~ScreenSelect() = default;
+
+	void Execute(float) override
+	{
+		if (auto button = GetGameObject()->GetComponent<TextButtonComponent>())
+		{
+			button->Select();
 		}
 	}
 };

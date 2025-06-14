@@ -26,6 +26,16 @@ void Scene::RemoveAll()
 	m_objects.clear();
 }
 
+std::shared_ptr<GameObject> dae::Scene::FindObjectByTag(const std::string& tag)
+{
+	for (const auto& obj : m_objects)
+	{
+		if (obj && obj->HasTag(tag))
+			return obj;
+	}
+	return nullptr;
+}
+
 void Scene::Update(float deltaTime)
 {
 	for(auto& object : m_objects)

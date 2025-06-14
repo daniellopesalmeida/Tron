@@ -9,7 +9,7 @@
 
 std::shared_ptr<dae::GameObject> LevelCreator::LoadLevel(dae::Scene& scene,
 	std::string levelPath,
-	std::unordered_map<std::string, std::vector<glm::vec2>>& outPositions, glm::vec2 pos)
+	std::unordered_map<std::string, std::vector<glm::vec2>>& outPositions, std::vector<glm::vec2>& nodePositions, glm::vec2 pos)
 {
 	auto levelRoot = std::make_shared<dae::GameObject>();
 	std::ifstream file(levelPath);
@@ -44,6 +44,7 @@ std::shared_ptr<dae::GameObject> LevelCreator::LoadLevel(dae::Scene& scene,
             int cellValue = std::stoi(cell);
             glm::vec2 localPos = { col * m_BlockSize, row * m_BlockSize };
             glm::vec2 worldPos = localPos + pos;
+            //glm::vec2 centerPos = worldPos + glm::vec2{ m_BlockSize * 0.5f, m_BlockSize * 0.5f };
 
             switch (static_cast<BlockType>(cellValue))
             {
@@ -63,6 +64,7 @@ std::shared_ptr<dae::GameObject> LevelCreator::LoadLevel(dae::Scene& scene,
                 path->SetPosition(worldPos.x, worldPos.y);
                 path->AddComponent<dae::RenderComponent>()->SetTexture("Path.png");
                 levelRoot->AddChild(path);
+                nodePositions.emplace_back(worldPos);
                 break;
             }
             case BlockType::P1:

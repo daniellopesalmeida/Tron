@@ -13,7 +13,7 @@ namespace dae
 		void RemoveAll();
 
 		std::string GetSceneName() const { return m_name; }
-
+		std::shared_ptr<GameObject> FindObjectByTag(const std::string& tag);
 
 		void Update(float deltaTime);
 		void FixedUpdate();

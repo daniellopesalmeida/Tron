@@ -35,6 +35,7 @@ namespace dae
 		void SetScale(float uniformScale) { m_Scale = glm::vec2{ uniformScale }; }
 		void SetRotation(float angle);
 		float GetRotation() { return m_RotationAngle; }
+		void SetOffset(glm::vec2 offset) { m_Offset = offset; }
 
 	private:
 		
@@ -42,5 +43,6 @@ namespace dae
 		glm::ivec2 m_CustomSize{ -1, -1 };
 		glm::vec2 m_Scale{ 1.0f, 1.0f };
 		float m_RotationAngle{ 0.0f };
+		glm::vec2 m_Offset{ 0.f,0.f };
 	};
 }

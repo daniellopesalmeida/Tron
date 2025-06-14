@@ -27,7 +27,7 @@ namespace dae
 		bool m_IsRotating{ true };
 		TransformComponent* m_Transform{};
 		
-		glm::vec3 m_Position{};
+		glm::vec2 m_Position{};
 		float m_RotationSpeed;  // Degrees per second
 		float m_Radius;         // Distance from pivot
 		float m_CurrentAngle{ 0.0f }; // Current angle

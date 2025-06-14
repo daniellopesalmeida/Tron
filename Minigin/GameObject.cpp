@@ -65,12 +65,12 @@ void dae::GameObject::Render() const
 }
 
 
-void dae::GameObject::SetPosition(float x, float y,float z)
+void dae::GameObject::SetPosition(float x, float y)
 {
-	m_Transform->SetPosition(x, y, z);
+	m_Transform->SetPosition(x, y);
 }
 
-void dae::GameObject::SetPosition(glm::vec3 position)
+void dae::GameObject::SetPosition(glm::vec2 position)
 {
 	m_Transform->SetPosition(position);
 }

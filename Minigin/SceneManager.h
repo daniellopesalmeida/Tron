@@ -20,6 +20,8 @@ namespace dae
 		void SetScene(const std::string& name);
 		std::shared_ptr<Scene> GetScene(std::string sceneName);
 		std::shared_ptr<Scene> GetCurrentScene() {return m_CurrentScene; };
+		std::vector<std::shared_ptr<Scene>>& GetScenes() { return m_scenes; }
+		
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;

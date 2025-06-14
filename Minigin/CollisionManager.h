@@ -17,6 +17,8 @@ namespace dae
 		void RemoveColisionComponent(CollisionComponent* comp);
 		void ClearColisionComponents();
 
+		std::vector<CollisionComponent*> GetCollisionComponents() { return m_CollisionObjects; }
+
 	private:
 		friend class Singleton<CollisionManager>;
 		CollisionManager() = default;
